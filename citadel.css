@@ -689,7 +689,7 @@
         }
 
         .transaction-amount.negative {
-            color: var(--wells-red);
+            color:red;
             font-weight: 500;
         }
 
