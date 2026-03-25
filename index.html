@@ -1,4 +1,4 @@
-<html lang="en" x-data="{ darkMode: false, mobileMenuOpen: false }"
+<html class="dark" lang="en" x-data="{ darkMode: true, mobileMenuOpen: false }"
     x-init="darkMode = localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') &amp;&amp; window.matchMedia('(prefers-color-scheme: dark)').matches)"
     :class="{ 'dark': darkMode }" class="" style="--vh: 7.38px;" data-qb-installed="true">
 
@@ -22,9 +22,6 @@
         const isDarkMode = localStorage.getItem('darkMode') === 'true' ||
             (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-        if (isDarkMode) {
-            document.documentElement.classList.add('dark');
-        }
     </script>
 
 
