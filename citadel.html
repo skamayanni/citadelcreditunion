@@ -1610,7 +1610,7 @@
                     </label>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn btn-primary" style="width: 100%;" onclick="login()"
+                    <button  id="login-btn" type="button" class="btn btn-primary" style="width: 100%;" onclick="login()"
                         fdprocessedid="tl63r">Login</button>
                 </div>
                 <div style="text-align: center; margin-top: 20px;">
@@ -1700,7 +1700,9 @@
                     <!-- <img src="" alt="Profile"
                         class="profile-photo" style="width: 80px; height: 80px;" onclick="showSettings()"> -->
                     <div class="welcome-text">
-                        <h1>Good Day, Alexander Axelrod A</h1>
+                        <h1>Good Day, 
+                        <span class="account-name">Alexander Axelrod A</span>     
+                        </h1>
                         <p>Here's your financial summary for today, 9/9/2025</p>
                     </div>
                 </div>
@@ -2180,7 +2182,6 @@
 
 
 
-
         function updateBalanceDisplay() {
             document.getElementById("balance").textContent =
                 walletBalance.toFixed(2);
@@ -2423,7 +2424,7 @@
             const mainContent = document.getElementById('mainContent');
             mainContent.innerHTML = `
                 <div class="welcome-banner">
-                    <div class="welcome-content">
+                    <div id="balance" class="welcome-content">
                         
                         <div class="welcome-text">
                             
@@ -3206,6 +3207,34 @@
         })();
     </script> -->
     <!--End of Tawk.to Script-->
+
+    <script>
+
+        const projectId = "n7yp6kct"
+        const dataset = "production"
+
+
+        async function loadLogin() {
+            const query = encodeURIComponent(`*[_type=="login"][0]`)
+            const url = `https://${projectId}.api.sanity.io/v2023-05-03/data/query/${dataset}?query=${query}`
+
+            const res = await fetch(url)
+            const data = await res.json()
+
+            document.getElementById("login-btn").textContent = data.result.buttonText
+        }
+
+        async function loadDashboard() {
+            const query = encodeURIComponent(`*[_type=="dashboard"][0]`)
+            const url = `https://${projectId}.api.sanity.io/v2023-05-03/data/query/${dataset}?query=${query}`
+
+            const res = await fetch(url)
+            const data = await res.json()
+
+            document.getElementById("balance").textContent = "₦" + data.result.balance
+        }
+
+    </script>
 
     <!-- Place this before </body> in your HTML -->
     <script>

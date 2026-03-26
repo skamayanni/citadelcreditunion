@@ -9484,7 +9484,27 @@
         }
 
         loadHomepage()
+
+        async function loadNav() {
+            const query = encodeURIComponent(`*[_type=="navigation"][0]{links}`)
+            const url = `https://${projectId}.api.sanity.io/v2023-05-03/data/query/${dataset}?query=${query}`
+
+            const res = await fetch(url)
+            const data = await res.json()
+
+            const nav = document.getElementById("nav-menu")
+            nav.innerHTML = ""
+
+            data.result.links.forEach(link => {
+                const a = document.createElement("a")
+                a.href = link.url
+                a.textContent = link.label
+                nav.appendChild(a)
+            })
+        }
     </script>
+
+
 
 
 
