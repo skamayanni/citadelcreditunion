@@ -1,11 +1,19 @@
+console.log('Homepage schema loaded')
+
 export default {
   name: 'homepage',
   title: 'Homepage',
   type: 'document',
   fields: [
-    { name: 'title', title: 'Title', type: 'string' },
-    { name: 'subtitle', title: 'Subtitle', type: 'text' },
-    { name: 'ctaText', title: 'Button Text', type: 'string' },
-    { name: 'ctaLink', title: 'Button Link', type: 'string' }
+    {
+      name: 'loginText',
+      title: 'Login Button Text',
+      type: 'string'
+    },
+    {
+      name: 'loginLink',
+      title: 'Login Link',
+      type: 'string'
+    }
   ]
 }
