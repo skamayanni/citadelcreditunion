@@ -7538,8 +7538,8 @@
             <div class="flex justify-between items-center h-25 lg:h-28">
                 <!-- Logo with glow effect -->
                 <div class="flex items-center group">
-                    
-                <img src="img/citadel.jpg" alt="Concora Credit Union" class="h-20 w-auto">
+
+                    <img src="img/citadel.jpg" alt="Concora Credit Union" class="h-20 w-auto">
                 </div>
 
                 <!-- Desktop Navigation with modern styling -->
@@ -7759,9 +7759,8 @@
         class="relative h-screen min-h-[500px] lg:min-h-[600px] flex items-center justify-center overflow-hidden bg-primary-900">
         <!-- Background Image -->
         <div class="absolute inset-0">
-            <img src="img/2geda.jpeg" alt=" "
-                class="w-full h-full object-cover object-[75%_25%] md:object-center" loading="eager"
-                onload="this.style.opacity=1" style="opacity: 1; transition: opacity 0.3s;">
+            <img src="img/2geda.jpeg" alt=" " class="w-full h-full object-cover object-[75%_25%] md:object-center"
+                loading="eager" onload="this.style.opacity=1" style="opacity: 1; transition: opacity 0.3s;">
             <!-- Mobile Fallback Background -->
             <div class="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900 lg:hidden">
             </div>
@@ -7825,7 +7824,7 @@
                             <i class="fa-solid fa-user-plus mr-2 lg:mr-3"></i>
                             Open Account Today
                         </a>
-                        <a href="./citadel.html"
+                        <a id="login-link" href=""
                             class="inline-flex items-center justify-center px-6 lg:px-8 py-3 lg:py-4 bg-white/10 backdrop-blur-sm hover:bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl lg:rounded-2xl transition-all duration-300 border border-white/30 hover:border-white/50 hover:-translate-y-1">
                             <i class="fa-solid fa-sign-in-alt mr-2 lg:mr-3"></i>
                             Login to Banking
@@ -9465,6 +9464,26 @@
                 alert("Saving the page is disabled!");
             }
         });
+    </script>
+
+    <script>
+        const projectId = "n7yp6kct"
+        const dataset = "production"
+
+        async function loadHomepage() {
+            const query = encodeURIComponent(`*[_type=="homepage"][0]{loginText, loginLink}`)
+            const url = `https://${projectId}.api.sanity.io/v2023-05-03/data/query/${dataset}?query=${query}`
+
+            const res = await fetch(url)
+            const data = await res.json()
+            const content = data.result
+
+            const link = document.getElementById("login-link")
+            link.textContent = content.loginText
+            link.href = content.loginLink
+        }
+
+        loadHomepage()
     </script>
 
 
