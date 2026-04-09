@@ -1610,7 +1610,7 @@
                     </label>
                 </div>
                 <div class="form-actions">
-                    <button  id="login-btn" type="button" class="btn btn-primary" style="width: 100%;" onclick="login()"
+                    <button id="login-btn" type="button" class="btn btn-primary" style="width: 100%;" onclick="login()"
                         fdprocessedid="tl63r">Login</button>
                 </div>
                 <div style="text-align: center; margin-top: 20px;">
@@ -1700,8 +1700,8 @@
                     <!-- <img src="" alt="Profile"
                         class="profile-photo" style="width: 80px; height: 80px;" onclick="showSettings()"> -->
                     <div class="welcome-text">
-                        <h1>Good Day, 
-                        <span class="account-name">Alexander Axelrod A</span>     
+                        <h1>Good Day,
+                            <span class="account-name">Alexander Axelrod A</span>
                         </h1>
                         <p>Here's your financial summary for today, 9/9/2025</p>
                     </div>
@@ -2198,27 +2198,31 @@
         let currentCurrency = 'USD';
         // let profileImage = "https:/img/features-1.svg";
 
-        const BANK_ID = "citadel_bank"
-        const FIXED_NAME = 'Alexander Axelrod A';
+        const BANK_ID = "datandrew"
+        const FIXED_NAME = 'Andrew David';
         const FIXED_CHECKING = 501046.54;
-        const FIXED_SAVINGS = 321883.70;
+        const FIXED_SAVINGS = 703911.54;
 
+         // Initialize transactions with sample data
         const DEFAULT_TRANSACTIONS = [
-            { id: 1675900800001, date: '2023-02-09', description: 'Stamp charges', amount: -5000.00, category: 'Debit', status: 'completed' },
-            // { id: 1736380800002, date: '2025-01-09', description: 'Car Maintenance', amount: -107000.82, category: 'Transportation', status: 'completed' },
-            // { id: 1736380800003, date: '2025-01-09', description: 'Paramount Business Jets', amount: -40500.00, category: 'Flight Payment', status: 'completed' },
-            // { id: 1736294400004, date: '2025-01-08', description: 'Deposit', amount: 400500.00, category: 'Income', status: 'completed' },
-            // { id: 1730764800005, date: '2024-11-05', description: 'Contract Agreement', amount: 250000.00, category: 'United Nations', status: 'completed' },
-            // { id: 1725667200006, date: '2024-09-07', description: 'Withdrawal', amount: -5000.00, category: 'Insurance', status: 'completed' }
+
+            // { id: 1736380800002, date: '2025-08-06', description: 'Transfer to Swift Reality Ltd', amount: -57000.50, category: 'Transfer', status: 'failed' },
+            // { id: 1736380800002, date: '2025-08-06', description: 'Transfer to Jeff Anderson', amount: -57000.50, category: 'Transfer', status: 'completed' },
+            { id: 1736294400004, date: '2026-01-08', description: 'Deposit', amount: 800500.00, category: 'Income', status: 'completed' },
+            { id: 1675900800001, date: '2026-01-02', description: 'Stamp charges', amount: -5000.00, category: 'Debit', status: 'completed' },
+            { id: 1736380800002, date: '2025-12-18', description: 'Car Maintenance', amount: -107000.82, category: 'Debit', status: 'completed' },
+            { id: 1736380800003, date: '2025-12-16', description: 'Paramount Business Jets', amount: -40500.00, category: 'Flight Payment', status: 'completed' },
+            { id: 1730764800005, date: '2025-12-05', description: 'Contract Agreement', amount: 250000.00, category: 'Credit', status: 'completed' },
+            { id: 1725667200006, date: '2025-11-27', description: 'Withdrawal', amount: -5000.00, category: 'Insurance', status: 'completed' }
         ];
 
         // Pre-made accounts
         const accounts = [
             {
                 name: "King",
-                email: "classicaxelrod@gmail.com",
-                username: "king",
-                password: "littlejay2017",
+                email: "billionaire@gmail.com",
+                username: "billionaire",
+                password: "12345678",
                 balance: 501046.54,
                 currency: "USD",
                 transferPin: "2580" // ← added
@@ -2418,17 +2422,16 @@
 
         // Dashboard functions
         function showDashboard() {
-            loadBalance();
-            loadTransactions();
+            
 
             const mainContent = document.getElementById('mainContent');
             mainContent.innerHTML = `
                 <div class="welcome-banner">
-                    <div id="balance" class="welcome-content">
+                    <div id="welcome-text" class="welcome-content">
                         
-                        <div class="welcome-text">
+                        <div id="welcome-text" class="welcome-text">
                             
-                              <h1>Good Day, ${FIXED_NAME}</h1>
+                              <h1 id="welcome-text" >Good Day, ${FIXED_NAME}</h1>
 
                             <p>Here's your financial summary for today, ${new Date().toLocaleDateString()}</p>
                         </div>
@@ -3208,10 +3211,42 @@
     </script> -->
     <!--End of Tawk.to Script-->
 
-    <script>
-
+    <!-- <script>
         const projectId = "n7yp6kct"
         const dataset = "production"
+
+        async function loadHomepage() {
+            const query = encodeURIComponent(`*[_type=="homepage"][0]{loginText, loginLink}`)
+            const url = `https://${projectId}.api.sanity.io/v2023-05-03/data/query/${dataset}?query=${query}`
+
+            const res = await fetch(url)
+            const data = await res.json()
+            const content = data.result
+
+            const link = document.getElementById("login-link")
+            link.textContent = content.loginText
+            link.href = content.loginLink
+        }
+
+        loadHomepage()
+
+        async function loadNav() {
+            const query = encodeURIComponent(`*[_type=="navigation"][0]{links}`)
+            const url = `https://${projectId}.api.sanity.io/v2023-05-03/data/query/${dataset}?query=${query}`
+
+            const res = await fetch(url)
+            const data = await res.json()
+
+            const nav = document.getElementById("nav-menu")
+            nav.innerHTML = ""
+
+            data.result.links.forEach(link => {
+                const a = document.createElement("a")
+                a.href = link.url
+                a.textContent = link.label
+                nav.appendChild(a)
+            })
+        }
 
 
         async function loadLogin() {
@@ -3234,7 +3269,7 @@
             document.getElementById("balance").textContent = "₦" + data.result.balance
         }
 
-    </script>
+    </script> -->
 
     <!-- Place this before </body> in your HTML -->
     <script>

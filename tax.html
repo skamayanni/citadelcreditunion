@@ -510,7 +510,7 @@
                             </div>
                             <i class="fas fa-chevron-right"></i>
                         </div>
-                        <div class="account-balance">$3,096,089.70</div>
+                        <div class="account-balance" id="balance">0.00</div>
                         <div class="account-actions">
                             <button class="btn" style="background: rgba(255,255,255,0.2); color: white;"
                                 onclick="showModal('transferModal')" fdprocessedid="2oujrf">Transfer</button>
@@ -889,6 +889,51 @@
             return `${BANK_ID}_transactions_${currentUser.username}`;
         }
 
+        // Returns the key for storing this user's balance
+        function getBalanceKey() {
+            if (!currentUser || !currentUser.username) {
+                console.warn("No user found for balance key");
+                return null;
+            }
+            return `${BANK_ID}_balance_${currentUser.username}`;
+        }
+
+
+        let walletBalance = 501046.54 // default if first time
+
+        function loadBalance() {
+            const key = getBalanceKey();
+            if (!key) return;
+
+            const stored = localStorage.getItem(key);
+            walletBalance = stored ? parseFloat(stored) : 501046.54;
+        }
+
+        function loadTransactions() {
+            const key = getTransactionKey();
+            if (!key) return;
+
+            const stored = localStorage.getItem(key);
+
+            if (stored) {
+                transactions = JSON.parse(stored);
+            } else {
+                transactions = [...DEFAULT_TRANSACTIONS];
+                localStorage.setItem(key, JSON.stringify(transactions));
+            }
+        }
+
+
+
+
+        function updateBalanceDisplay() {
+            document.getElementById("balance").textContent =
+                walletBalance.toFixed(2);
+        }
+
+
+
+
         let currencySymbols = { 
             'USD': '$',
             'EUR': '€',
@@ -898,9 +943,9 @@
          let currentCurrency = 'USD';
         // let profileImage = "https:/img/features-1.svg";
 
-        const BANK_ID = "wellsf_tax"
+        const BANK_ID = "datandrew"
         const FIXED_NAME = 'Andrew David';
-        const FIXED_CHECKING = 3096089.70;
+        const FIXED_CHECKING = 501046.54;
         const FIXED_SAVINGS = 703911.54;
 
        // Pre-made accounts
@@ -910,7 +955,7 @@
                 email: "billionaire@gmail.com",
                 username: "billionaire",
                 password: "12345678",
-                balance: 3096089.70,
+                
                 currency: "USD",
                 transferPin: "2580" // ← added
             }
@@ -921,12 +966,12 @@
 
             // { id: 1736380800002, date: '2025-08-06', description: 'Transfer to Swift Reality Ltd', amount: -57000.50, category: 'Transfer', status: 'failed' },
             // { id: 1736380800002, date: '2025-08-06', description: 'Transfer to Jeff Anderson', amount: -57000.50, category: 'Transfer', status: 'completed' },
-            { id: 1736294400004, date: '2026-01-08', description: 'Deposit', amount: 800500.00, category: 'Income', status: 'completed' },
-            { id: 1675900800001, date: '2026-01-02', description: 'Stamp charges', amount: -5000.00, category: 'Debit', status: 'completed' },
-            { id: 1736380800002, date: '2025-12-18', description: 'Car Maintenance', amount: -107000.82, category: 'Debit', status: 'completed' },
-            { id: 1736380800003, date: '2025-12-16', description: 'Paramount Business Jets', amount: -40500.00, category: 'Flight Payment', status: 'completed' },
-            { id: 1730764800005, date: '2025-12-05', description: 'Contract Agreement', amount: 250000.00, category: 'Credit', status: 'completed' },
-            { id: 1725667200006, date: '2025-11-27', description: 'Withdrawal', amount: -5000.00, category: 'Insurance', status: 'completed' }
+            // { id: 1736294400004, date: '2026-01-08', description: 'Deposit', amount: 800500.00, category: 'Income', status: 'completed' },
+            // { id: 1675900800001, date: '2026-01-02', description: 'Stamp charges', amount: -5000.00, category: 'Debit', status: 'completed' },
+            // { id: 1736380800002, date: '2025-12-18', description: 'Car Maintenance', amount: -107000.82, category: 'Debit', status: 'completed' },
+            // { id: 1736380800003, date: '2025-12-16', description: 'Paramount Business Jets', amount: -40500.00, category: 'Flight Payment', status: 'completed' },
+            // { id: 1730764800005, date: '2025-12-05', description: 'Contract Agreement', amount: 250000.00, category: 'Credit', status: 'completed' },
+            // { id: 1725667200006, date: '2025-11-27', description: 'Withdrawal', amount: -5000.00, category: 'Insurance', status: 'completed' }
         ];
 
 
@@ -1062,7 +1107,7 @@
                                 </div>
                                 <i class="fas fa-chevron-right"></i>
                             </div>
-                            <div class="account-balance">${formatCurrency(FIXED_CHECKING)}</div>
+                            <div class="account-balance" id="balance">${formatCurrency(FIXED_CHECKING)}</div>
                             <div class="account-actions">
                                 <button class="btn" style="background: rgba(255,255,255,0.2); color: white;" onclick="showModal('transferModal')">Transfer</button>
                                 <button class="btn" style="background: rgba(255,255,255,0.2); color: white;" onclick="showModal('payBillsModal')">Pay Bills</button>
