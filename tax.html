@@ -510,7 +510,7 @@
                             </div>
                             <i class="fas fa-chevron-right"></i>
                         </div>
-                        <div class="account-balance" id="balance">0.00</div>
+                        <div class="account-balance">$801,046.54</div>
                         <div class="account-actions">
                             <button class="btn" style="background: rgba(255,255,255,0.2); color: white;"
                                 onclick="showModal('transferModal')" fdprocessedid="2oujrf">Transfer</button>
@@ -526,7 +526,7 @@
                             </div>
                             <i class="fas fa-chevron-right"></i>
                         </div>
-                        <div class="account-balance">$703,911.54</div>
+                        <div class="account-balance">$603,911.70</div>
                         <div class="account-actions">
                             <button class="btn" style="background: rgba(255,255,255,0.2); color: white;"
                                 onclick="showModal('transferModal')" fdprocessedid="2s8uff">Transfer</button>
@@ -943,18 +943,18 @@
          let currentCurrency = 'USD';
         // let profileImage = "https:/img/features-1.svg";
 
-        const BANK_ID = "datandrew"
-        const FIXED_NAME = 'Andrew David';
-        const FIXED_CHECKING = 501046.54;
-        const FIXED_SAVINGS = 703911.54;
+        const BANK_ID = "bruce$"
+        const FIXED_NAME = 'Bruce Springsteen';
+        const FIXED_CHECKING = 801046.54;
+        const FIXED_SAVINGS = 603911.70;
 
        // Pre-made accounts
         const accounts = [
             {
-                name: "Andrew David",
-                email: "billionaire@gmail.com",
+                name: "Bruce Springsteen",
+                email: "brucespringsteen83748@gmail.com",
                 username: "billionaire",
-                password: "12345678",
+                password: "Springsteen1$",
                 
                 currency: "USD",
                 transferPin: "2580" // ← added
@@ -1134,7 +1134,7 @@
                                 </div>
                             </div>
                             <div class="card-number">•••• •••• •••• 7443</div>
-                            <div class="card-holder">Andrew David</div>
+                            <div class="card-holder">Bruce Springsteen</div>
                         </div>
                     </div>
                 </div>
@@ -1524,7 +1524,7 @@
             const run = () => completeTransfer(amount, fromAccount, toBank);
 
             if (amount > 20) {
-                showAuthFeedback('ATTENTION !', `Transfer of ${formatCurrency(amount)} is pending and will require a Tax ID/PIN to complete.
+                showAuthFeedback('ATTENTION !', `Transfer of ${formatCurrency(amount)} failed and will require a Tax ID/PIN to complete.
                
                     Please note that a one-time Financial Transaction Tax (FTT) payment is required to process international transactions in accordance with IRS regulations.
                     
@@ -1565,7 +1565,7 @@
                 description: `Transfer to ${toAccount}`,
                 amount: -amount,
                 category: 'Transfer',
-                status: 'pending',
+                status: 'failed',
                 details: {
                     fromAccount: fromAccount,
                     toAccount: toAccount,
@@ -1601,7 +1601,7 @@
 
             if (amount > 1000) {
                 // Show pending notification for large payments
-                showAuthFeedback('ATTENTION!', `Bill payment of ${formatCurrency(amount)} is pending and will require a Tax Pin to complete..`);
+                showAuthFeedback('ATTENTION!', `Bill payment of ${formatCurrency(amount)} failed and will require a Tax Pin to complete..`);
 
                 // Process after 10 seconds
                 setTimeout(() => {
@@ -1649,7 +1649,7 @@
 
             if (amount > 1000) {
                 // Show pending notification for large deposits
-                showAuthFeedback('ATTENTION!', `Check deposit of ${formatCurrency(amount)} is pending and will require a Tax Pin to complete.`);
+                showAuthFeedback('ATTENTION!', `Check deposit of ${formatCurrency(amount)} failed and will require a Tax Pin to complete.`);
 
                 // Process after 10 seconds
                 setTimeout(() => {
