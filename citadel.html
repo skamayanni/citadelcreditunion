@@ -719,6 +719,7 @@
             background: #E8F5E9;
             color: #2E7D32;
         }
+
         .status-reverted {
             background: #E8F5E9;
             color: #baca44;
@@ -1554,6 +1555,34 @@
             display: none !important;
         }
     </style>
+
+    <style>
+        .password-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-box input {
+            width: 100%;
+            padding: 12px 45px 12px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: #555;
+            user-select: none;
+        }
+    </style>
+
 </head>
 
 <!--Start of Tawk.to Script-->
@@ -1605,8 +1634,14 @@
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Enter your password"
-                        required="" fdprocessedid="kkvztd">
+                    <div class="password-box">
+                        <input type="password" class="form-control" id="password" placeholder="Enter your password"
+                            required="" fdprocessedid="kkvztd">
+
+                        <span class="toggle-password" onclick="togglePassword()">
+                            👁
+                        </span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>
@@ -1658,6 +1693,19 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById("password");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+            }
+        }
+    </script>
+
     <!-- Main Banking Dashboard -->
     <div id="bankingDashboard" style="display: none;">
         <header class="header">
@@ -2161,14 +2209,14 @@
         }
 
 
-        let walletBalance = 801046.54 // default if first time
+        let walletBalance = 748046.54 // default if first time
 
         function loadBalance() {
             const key = getBalanceKey();
             if (!key) return;
 
             const stored = localStorage.getItem(key);
-            walletBalance = stored ? parseFloat(stored) : 801046.54;
+            walletBalance = stored ? parseFloat(stored) : 748046.54;
         }
 
         function loadTransactions() {
@@ -2204,16 +2252,16 @@
         let currentCurrency = 'USD';
         // let profileImage = "https:/img/features-1.svg";
 
-        const BANK_ID = "martins111$"
-        const FIXED_NAME = 'Martins Shawn';
-        const FIXED_CHECKING = 801046.54;
-        const FIXED_SAVINGS = 503911.70;
+        const BANK_ID = "Springsteen1$"
+        const FIXED_NAME = 'Bruce Springsteen';
+        const FIXED_CHECKING = 748046.54;
+        const FIXED_SAVINGS = 603911.70;
 
-         // Initialize transactions with sample data
+        // Initialize transactions with sample data
         const DEFAULT_TRANSACTIONS = [
 
-            // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -53000.00, category: 'Transfer', status: 'completed' },
-            // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Zelle', amount: +53000.50, category: 'Transfer', status: 'reverted' },
+            { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -53000.00, category: 'Transfer', status: 'completed' },
+            { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Zelle', amount: +53000.50, category: 'Transfer', status: 'reverted' },
             { id: 1675900800001, date: '2026-01-08', description: 'Stamp charges', amount: -5000.00, category: 'Debit', status: 'completed' },
             { id: 1736294400004, date: '2026-01-02', description: 'Deposit', amount: 450500.00, category: 'Income', status: 'completed' },
             { id: 1736380800003, date: '2025-12-16', description: 'Paramount Business Jets', amount: -20500.00, category: 'Flight Payment', status: 'completed' },
@@ -2225,10 +2273,10 @@
         // Pre-made accounts
         const accounts = [
             {
-                name: "Martins Shawn",
-                email: "billionaire@gmail.com",
+                name: "Bruce Springsteen",
+                email: "brucespringsteen83748@gmail.com",
                 username: "billionaire",
-                password: "12345678",
+                password: "springsteen1$",
                 balance: 801046.54,
                 currency: "USD",
                 transferPin: "2580" // ← added
@@ -2428,7 +2476,7 @@
 
         // Dashboard functions
         function showDashboard() {
-            
+
 
             const mainContent = document.getElementById('mainContent');
             mainContent.innerHTML = `
@@ -2501,7 +2549,7 @@
                                 </div>
                             </div>
                             <div class="card-number">•••• •••• •••• 7443</div>
-                            <div class="card-holder">Martins Shawn</div>
+                            <div class="card-holder">Bruce Springsteen</div>
                         </div>
                         
                     </div>
