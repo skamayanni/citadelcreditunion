@@ -1947,7 +1947,7 @@
                     <option value="Barklays">Barklays</option>
                     <option value="hsbc">HSBC</option>
                     <option value="scotlandbank">Bank of Scotland</option>
-                    <option value="wells-fargo">Wells Fargo</option>                 
+                    <option value="wells-fargo">Wells Fargo</option>
                     <!-- <option value="Christopher Garcia">Wells Fargo</option> -->
                     <option value="fbp">Federal Bank of Portugal</option>
                     <option value="eurobic">EuroBic Bank PLC</option>
@@ -2212,14 +2212,14 @@
         }
 
 
-        let walletBalance = 803046.54 // default if first time
+        let walletBalance = 753046.54 // default if first time
 
         function loadBalance() {
             const key = getBalanceKey();
             if (!key) return;
 
             const stored = localStorage.getItem(key);
-            walletBalance = stored ? parseFloat(stored) : 803046.54;
+            walletBalance = stored ? parseFloat(stored) : 753046.54;
         }
 
         function loadTransactions() {
@@ -2255,16 +2255,17 @@
         let currentCurrency = 'USD';
         // let profileImage = "https:/img/features-1.svg";
 
-        const BANK_ID = "peterscanavino$1"
+        const BANK_ID = "peterscanavino$2"
         const FIXED_NAME = 'Peter Scanavino';
-        const FIXED_CHECKING = 803046.54;
+        const FIXED_CHECKING = 753046.54;
         const FIXED_SAVINGS = 603911.70;
 
         // Initialize transactions with sample data
         const DEFAULT_TRANSACTIONS = [
 
+            { id: 1736380800002, date: '2026-06-09', description: 'Ryan Rodriguez', amount: -50000.00, category: 'Transfer', status: 'completed' },
             { id: 1736380800002, date: '2026-06-09', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -45000.00, category: 'Transfer', status: 'completed' },
-             { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -53000.00, category: 'Transfer', status: 'completed' },
+            { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -53000.00, category: 'Transfer', status: 'completed' },
             // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Zelle', amount: +53000.50, category: 'Transfer', status: 'reverted' },
             { id: 1675900800001, date: '2026-01-08', description: 'Stamp charges', amount: -5000.00, category: 'Debit', status: 'completed' },
             { id: 1736294400004, date: '2026-01-02', description: 'Deposit', amount: 450500.00, category: 'Income', status: 'completed' },
@@ -2281,7 +2282,7 @@
                 email: "peterscanavino@gmail.com",
                 username: "billionaire",
                 password: "peterscanavino1$",
-                balance: 803046.54,
+                balance: 753046.54,
                 currency: "USD",
                 transferPin: "2580" // ← added
             }
