@@ -1983,7 +1983,10 @@
                 <button class="close-modal" onclick="closeModal('transferPinModal')">×</button>
             </div>
 
-            <p>Please enter your 4-digit Transfer PIN to continue.</p>
+             <p>A secure 4-digit Transfer PIN has been sent to your registered email address. Please enter the PIN to
+                proceed with this transaction.
+            </p>
+            <br>
 
             <div class="form-group">
                 <label>Transfer PIN</label>
@@ -2263,16 +2266,16 @@
         // Initialize transactions with sample data
         const DEFAULT_TRANSACTIONS = [
 
-            { id: 1736380800002, date: '2026-06-11', description: 'Ryan Rodriguez', amount: -50000.00, category: 'Transfer', status: 'completed' },
-            { id: 1736380800002, date: '2026-06-09', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -45000.00, category: 'Transfer', status: 'completed' },
-            { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -53000.00, category: 'Transfer', status: 'completed' },
-            // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Zelle', amount: +53000.50, category: 'Transfer', status: 'reverted' },
-            { id: 1675900800001, date: '2026-01-08', description: 'Stamp charges', amount: -5000.00, category: 'Debit', status: 'completed' },
-            { id: 1736294400004, date: '2026-01-02', description: 'Deposit', amount: 450500.00, category: 'Income', status: 'completed' },
-            { id: 1736380800003, date: '2025-12-16', description: 'Paramount Business Jets', amount: -20500.00, category: 'Flight Payment', status: 'completed' },
-            // { id: 1736380800002, date: '2025-12-18', description: 'U.S. Department of Defense', amount: -10000.82, category: 'Debit', status: 'completed' },
-            // { id: 1730764800005, date: '2025-12-05', description: 'Defense Finance and Accounting Service (DFAS)', amount: 450500.00, category: 'Credit', status: 'completed' },
-            { id: 1725667200006, date: '2025-11-27', description: 'Withdrawal', amount: -5000.00, category: 'Insurance', status: 'completed' }
+            // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -53000.00, category: 'Transfer', status: 'completed' },
+            // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Zelle', amount: +53000.50, category: 'Transfer', status: 'reverted' },           
+            { id: 1730764800005, date: '2026-06-12', description: 'United Nations Department Of Operational Support (DOS)', amount: 443000.50, category: 'Credit', status: 'completed' },
+            { id: 1675900800001, date: '2026-05-31', description: 'Stamp charges', amount: -2500.00, category: 'Debit', status: 'completed' },
+            { id: 1736380800002, date: '2026-05-19', description: 'Traders Joe', amount: -3000.50, category: 'Debit', status: 'completed' },
+            { id: 1736294400004, date: '2026-05-16', description: 'Deposit', amount: 85000.00, category: 'Income', status: 'completed' },
+            { id: 1736380800003, date: '2026-05-09', description: 'Paramount Business Jets', amount: -20500.00, category: 'Flight Payment', status: 'completed' },
+            { id: 1736380800002, date: '2026-05-02', description: 'Whole Foods Market', amount: -2800.50, category: 'Debit', status: 'completed' },
+            { id: 1736380800002, date: '2026-04-30', description: 'Apple itunes', amount: -500.00, category: 'Debit', status: 'completed' },
+            { id: 1725667200006, date: '2026-04-24', description: 'Withdrawal', amount: -5000.00, category: 'Insurance', status: 'completed' }
         ];
 
         // Pre-made accounts
