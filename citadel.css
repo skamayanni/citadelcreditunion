@@ -1219,3 +1219,35 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        #authTitle {
+            color: #a00000;
+            margin: 10px;
+        }
+
+        
+        .password-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-box input {
+            width: 100%;
+            padding: 12px 45px 12px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: #555;
+            user-select: none;
+        }
+    
