@@ -695,32 +695,35 @@
     <div class="modal" id="transferModal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">Transfer Money</h2>
+                <h2 class="modal-title">Make A Transfer</h2>
                 <button class="close-modal" onclick="closeModal('transferModal')">×</button>
             </div>
 
             <div class="form-group">
                 <label>From Account</label>
                 <select class="form-control" id="fromAccount">
-                    <option value="checking">Checking (...4321)</option>
-                    <option value="savings">Savings (...8765)</option>
+                    <option value="checking">Checking (...7655)</option>
+                    <option value="savings">Savings (...6941)</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>To Account Number</label>
-                <input type="number" class="form-control" id="toAccountNumber" placeholder="Enter Account Number">
+                <label>To Account/IBAN Number</label>
+                <input type=" " class="form-control" id="toAccountNumber" placeholder="Enter Account Number">
             </div>
 
+            <div class="form-group">
+                <label>Swift Code</label>
+                <input type=" " class="form-control" id="routingNumber" placeholder="Enter Swift Code">
+            </div>
 
-
-           <div class="form-group">
+            <div class="form-group">
                 <label>To Bank</label>
                 <select class="form-control" id="toBank">
                     <option value="zelle">Send with Zelle®</option>
                     <option value="boa">Bank of America</option>
                     <option value="sc">Standard Chartered</option>
-                    <!-- <option value="Minhaj Welfare Foundation USA INC">Standard Chartered</option> -->
+                    <option value="João Marco Silva">Santander Brasil</option>
                     <option value="pnc">PNC Financial Service®</option>
                     <option value="wellby">Wellby Financial</option>
                     <option value="amex">American Express®</option>
@@ -728,17 +731,18 @@
                     <option value="hsbc">HSBC</option>
                     <option value="scotlandbank">Bank of Scotland</option>
                     <option value="wells-fargo">Wells Fargo</option>
-                    <!-- <option value="Christopher Garcia">Wells Fargo</option> -->
+                    <option value="Banco do Brasil">Banco do Brasil</option>
+                    <option value="Banco de Chile">Banco de Chile</option>
                     <option value="fbp">Federal Bank of Portugal</option>
                     <option value="eurobic">EuroBic Bank PLC</option>
                     <option value="nu-bank">NU Bank</option>
                     <option value="capitalone">Capital One</option>
-                    <!-- <option value="Ryan Rodriguez">Capital One</option> -->
+                    <option value="BancoEstado">BancoEstado</option>
                     <option value="nt">Northern Trust</option>
                     <option value="boe">Bank of England</option>
                     <option value="td">TD Bank</option>
-                    <!-- <option value="chase">CHASE PLC®</option> -->
-                    <option value="Charles David Brown">CHASE PLC®</option>
+                    <option value="chase">CHASE PLC®</option>
+                    <option value="Scotiabank Chile">Scotiabank Chile</option>
                     <option value="spain-bank">Bank of Spain</option>
                 </select>
             </div>
