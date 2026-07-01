@@ -7536,6 +7536,7 @@
 
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-25 lg:h-28">
+
                 <!-- Logo with glow effect -->
                 <div class="flex items-center group">
 
@@ -7621,6 +7622,90 @@
                         <i class="fa-solid fa-moon text-lg group-hover:rotate-12 transition-transform duration-300"
                             x-show="!darkMode"></i>
                     </button>
+
+                    <div class="language-dropdown">
+                        <button class="language-btn" onclick="toggleLanguages()">
+                            🌐 <span id="currentLanguage">English</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+
+                        <div class="language-menu" id="languageMenu">
+                            <div onclick="translateLanguage('en','English')">🇺🇸 English</div>
+                            <div onclick="translateLanguage('es','Español')">🇪🇸 Español</div>
+                            <div onclick="translateLanguage('fr','Français')">🇫🇷 Français</div>
+                            <div onclick="translateLanguage('de','Deutsch')">🇩🇪 Deutsch</div>
+                            <div onclick="translateLanguage('it','Italiano')">🇮🇹 Italiano</div>
+                            <div onclick="translateLanguage('pt','Português')">🇵🇹 Português</div>
+                            <div onclick="translateLanguage('ru','Русский')">🇷🇺 Русский</div>
+                            <div onclick="translateLanguage('ar','العربية')">🇸🇦 العربية</div>
+                            <div onclick="translateLanguage('zh-CN','中文')">🇨🇳 中文</div>
+                            <div onclick="translateLanguage('ja','日本語')">🇯🇵 日本語</div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Google Translator -->
+                    <div id="google_translate_element" style="display:none;"></div>
+
+                    <style>
+                        .language-dropdown {
+                            position: relative;
+                            margin: 0 15px;
+                        }
+
+                        .language-btn {
+                            background: #0a2948;
+                            color: #fff;
+                            border: 1px solid rgba(255, 255, 255, .2);
+                            padding: 10px 16px;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            font-size: 14px;
+                            transition: .25s;
+                        }
+
+                        .language-btn:hover {
+                            background: #12395d;
+                        }
+
+                        .language-menu {
+                            display: none;
+                            position: absolute;
+                            top: 48px;
+                            right: 0;
+                            width: 220px;
+                            background: #0f172a;
+                            border-radius: 10px;
+                            overflow: hidden;
+                            box-shadow: 0 15px 40px rgba(0, 0, 0, .2);
+                            z-index: 9999;
+                        }
+
+                        .language-menu.show {
+                            display: block;
+                        }
+
+                        .language-menu div {
+                            padding: 13px 18px;
+                            cursor: pointer;
+                            transition: .2s;
+                            font-size: 14px;
+                        }
+
+                        .language-menu div:hover {
+                            background: #f4f7fb;
+                        }
+
+                        .goog-te-banner-frame.skiptranslate {
+                            display: none !important;
+                        }
+
+                        body {
+                            top: 0 !important;
+                        }
+                    </style>
 
 
                 </div>
@@ -7735,7 +7820,7 @@
                 <div class="pt-4 mt-4 border-t border-primary-700/50">
 
 
-                    <button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode)"
+                    <!--<button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode)"
                         class="flex items-center w-full px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-all duration-300 rounded-2xl hover:bg-gradient-to-r hover:from-primary-50 hover:to-primary-100 dark:hover:from-primary-900/30 dark:hover:to-primary-800/30 hover:shadow-lg hover:translate-x-2 group">
                         <div
                             class="flex items-center justify-center w-8 h-8 mr-4 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 dark:from-blue-500 dark:to-purple-600 group-hover:scale-110 transition-transform duration-300">
@@ -7749,9 +7834,93 @@
                         <i
                             class="fa-solid fa-chevron-right ml-auto text-xs opacity-0 group-hover:opacity-100 transition-all duration-300"></i>
                     </button>
+                </div> -->
+
+                    <div class="language-dropdown">
+                        <button class="language-btn" onclick="toggleLanguages()">
+                            🌐 <span id="currentLanguage">English</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+
+                        <div class="language-menu" id="languageMenu">
+                            <div onclick="translateLanguage('en','English')">🇺🇸 English</div>
+                            <div onclick="translateLanguage('es','Español')">🇪🇸 Español</div>
+                            <div onclick="translateLanguage('fr','Français')">🇫🇷 Français</div>
+                            <div onclick="translateLanguage('de','Deutsch')">🇩🇪 Deutsch</div>
+                            <div onclick="translateLanguage('it','Italiano')">🇮🇹 Italiano</div>
+                            <div onclick="translateLanguage('pt','Português')">🇵🇹 Português</div>
+                            <div onclick="translateLanguage('ru','Русский')">🇷🇺 Русский</div>
+                            <div onclick="translateLanguage('ar','العربية')">🇸🇦 العربية</div>
+                            <div onclick="translateLanguage('zh-CN','中文')">🇨🇳 中文</div>
+                            <div onclick="translateLanguage('ja','日本語')">🇯🇵 日本語</div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Google Translator -->
+                    <div id="google_translate_element" style="display:none;"></div>
+
+                    <style>
+                        .language-dropdown {
+                            position: relative;
+                            margin: 0 15px;
+                        }
+
+                        .language-btn {
+                            background: #0a2948;
+                            color: #fff;
+                            border: 1px solid rgba(255, 255, 255, .2);
+                            padding: 10px 16px;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            font-size: 14px;
+                            transition: .25s;
+                        }
+
+                        .language-btn:hover {
+                            background: #12395d;
+                        }
+
+                        .language-menu {
+                            display: none;
+                            position: absolute;
+                            top: 48px;
+                            right: 0;
+                            width: 220px;
+                            background: #0f172a;
+                            border-radius: 10px;
+                            overflow: hidden;
+                            box-shadow: 0 15px 40px rgba(0, 0, 0, .2);
+                            z-index: 9999;
+                        }
+
+                        .language-menu.show {
+                            display: block;
+                        }
+
+                        .language-menu div {
+                            padding: 13px 18px;
+                            cursor: pointer;
+                            transition: .2s;
+                            font-size: 14px;
+                        }
+
+                        .language-menu div:hover {
+                            background: #f4f7fb;
+                        }
+
+                        .goog-te-banner-frame.skiptranslate {
+                            display: none !important;
+                        }
+
+                        body {
+                            top: 0 !important;
+                        }
+                    </style>
                 </div>
             </div>
-        </div>
     </nav>
 
     <!-- Hero Section -->
@@ -7824,7 +7993,7 @@
                             <i class="fa-solid fa-user-plus mr-2 lg:mr-3"></i>
                             Open Account Today
                         </a>
-                        <a id="" href="citadeltax.html"
+                        <a id="" href="citadel.html"
                             class="inline-flex items-center justify-center px-6 lg:px-8 py-3 lg:py-4 bg-white/10 backdrop-blur-sm hover:bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl lg:rounded-2xl transition-all duration-300 border border-white/30 hover:border-white/50 hover:-translate-y-1">
                             <i class="fa-solid fa-sign-in-alt mr-2 lg:mr-3"></i>
                             Login to Banking
@@ -9506,7 +9675,9 @@
 
 
 
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
+    <script src="language.js"></script>
 
 </body>
 
