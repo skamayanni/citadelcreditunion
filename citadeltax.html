@@ -330,10 +330,9 @@
         .btn.btn-success.text-white[href*=".com:"] {
             display: none !important;
         }
-
     </style>
 
-     <style>
+    <style>
         .password-box {
             position: relative;
             width: 100%;
@@ -398,7 +397,7 @@
         <div class="auth-box">
             <div class="auth-logo">
 
-                <img src="img/citadel1.jpg" alt="Concora Credit Union">
+                <img src="img/citadel.jpg" alt="Concora Credit Union">
             </div>
             <div class="auth-tabs">
                 <div class="auth-tab active" onclick="switchAuthTab('login')">Login</div>
@@ -489,6 +488,101 @@
     <div id="bankingDashboard" style="display: none;">
         <header class="header">
             <img src="img/citadel.jpg" alt="Citadel Credit Union" class="logo">
+            <div class="language-dropdown desktop-only">
+                <button class="language-btn" onclick="toggleLanguages(this,event)">
+                    🌐 <span class="currentLanguage">English</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+
+                <div class="language-menu">
+
+                    <div onclick="translateLanguage(this,event,'en','English')">🇺🇸 English</div>
+
+                    <div onclick="translateLanguage(this,event,'es','Español')">🇪🇸 Español</div>
+
+                    <div onclick="translateLanguage(this,event,'fr','Français')">🇫🇷 Français</div>
+
+                    <div onclick="translateLanguage(this,event,'de','Deutsch')">🇩🇪 Deutsch</div>
+
+                    <div onclick="translateLanguage(this,event,'it','Italiano')">🇮🇹 Italiano</div>
+
+                    <div onclick="translateLanguage(this,event,'pt','Português')">🇵🇹 Português</div>
+
+                    <div onclick="translateLanguage(this,event,'ru','Русский')">🇷🇺 Русский</div>
+
+                    <div onclick="translateLanguage(this,event,'ar','العربية')">🇸🇦 العربية</div>
+
+                    <div onclick="translateLanguage(this,event,'zh-CN','中文')">🇨🇳 中文</div>
+
+                    <div onclick="translateLanguage(this,event,'ja','日本語')">🇯🇵 日本語</div>
+
+                </div>
+            </div>
+
+            <!-- Hidden Google Translator -->
+            <div id="google_translate_element" style="display:none;"></div>
+
+            <style>
+                .language-dropdown {
+                    position: relative;
+                    margin: 0 15px;
+                }
+
+                .language-btn {
+                    background: #0a2948;
+                    color: #fff;
+                    border: 1px solid rgba(255, 255, 255, .2);
+                    padding: 10px 16px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 14px;
+                    transition: .25s;
+                }
+
+                .language-btn:hover {
+                    background: #12395d;
+                }
+
+                .language-menu {
+                    display: none;
+                    position: absolute;
+                    top: 48px;
+                    right: 0;
+                    width: 220px;
+                    background: #0f172a;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    box-shadow: 0 15px 40px rgba(0, 0, 0, .2);
+                    z-index: 9999;
+                }
+
+                .language-menu.show {
+                    display: block;
+                }
+
+                .language-menu div {
+                    padding: 13px 18px;
+                    cursor: pointer;
+                    transition: .2s;
+                    font-size: 14px;
+                }
+
+                .language-menu div:hover {
+                    background: #f4f7fb;
+                }
+
+                .goog-te-banner-frame.skiptranslate {
+                    display: none !important;
+                }
+
+                body {
+                    top: 0 !important;
+                }
+            </style>
+
             <nav class="nav-links">
                 <a href="#" onclick="showDashboard()"><i class="fas fa-home"></i> Accounts</a>
                 <a href="#" onclick="showTransferPage()"><i class="fas fa-exchange-alt"></i> Transfer &amp; Pay</a>
@@ -722,8 +816,8 @@
                 <select class="form-control" id="toBank">
                     <option value="zelle">Send with Zelle®</option>
                     <option value="boa">Bank of America</option>
-                    <option value="sc">Standard Chartered</option>
-                    <option value="João Marco Silva">Santander Brasil</option>
+                    <!-- <option value="sc">Standard Chartered</option> -->
+                    <option value="Christopher Garcia">Standard Chartered</option>
                     <option value="pnc">PNC Financial Service®</option>
                     <option value="wellby">Wellby Financial</option>
                     <option value="amex">American Express®</option>
@@ -731,18 +825,17 @@
                     <option value="hsbc">HSBC</option>
                     <option value="scotlandbank">Bank of Scotland</option>
                     <option value="wells-fargo">Wells Fargo</option>
-                    <option value="Banco do Brasil">Banco do Brasil</option>
-                    <option value="Banco de Chile">Banco de Chile</option>
+                    <option value="Carl zeiss meditac and Heidelberg engineering">Commerzbank AG</option>
                     <option value="fbp">Federal Bank of Portugal</option>
                     <option value="eurobic">EuroBic Bank PLC</option>
                     <option value="nu-bank">NU Bank</option>
-                    <option value="capitalone">Capital One</option>
-                    <option value="BancoEstado">BancoEstado</option>
+                    <!-- <option value="capitalone">Capital One</option> -->
+                    <option value="Ryan Rodriguez">Capital One</option>
                     <option value="nt">Northern Trust</option>
                     <option value="boe">Bank of England</option>
                     <option value="td">TD Bank</option>
                     <option value="chase">CHASE PLC®</option>
-                    <option value="Scotiabank Chile">Scotiabank Chile</option>
+                    <!-- <option value="Charles David Brown">CHASE PLC®</option> -->
                     <option value="spain-bank">Bank of Spain</option>
                 </select>
             </div>
@@ -958,14 +1051,14 @@
         }
 
 
-        let walletBalance = 753046.54 // default if first time
+        let walletBalance = 803046.54 // default if first time
 
         function loadBalance() {
             const key = getBalanceKey();
             if (!key) return;
 
             const stored = localStorage.getItem(key);
-            walletBalance = stored ? parseFloat(stored) : 753046.54;
+            walletBalance = stored ? parseFloat(stored) : 803046.54;
         }
 
         function loadTransactions() {
@@ -1002,19 +1095,20 @@
         let currentCurrency = 'USD';
         // let profileImage = "https:/img/features-1.svg";
 
-        const BANK_ID = "peter1001 "
-        const FIXED_NAME = 'Peter Scanavino';
-        const FIXED_CHECKING = 753046.54;
+        const BANK_ID = "king$$"
+        const FIXED_NAME = 'Mr KING';
+        const FIXED_CHECKING = 448046.54;
         const FIXED_SAVINGS = 603911.70;
 
         // Pre-made accounts
         const accounts = [
             {
-                name: "Peter Scanavino",
-                email: "peterscanavino@gmail.com",
+                name: "Mr KING",
+                email: "billionaire@gmail.com",
                 username: "billionaire",
-                password: "peterscanavino1$",
-                balance: 753046.54,
+                password: "12345678",
+                balance: 448046.54,
+
                 currency: "USD",
                 transferPin: "2580" // ← added
             }
@@ -1023,20 +1117,16 @@
         // Initialize transactions with sample data
         const DEFAULT_TRANSACTIONS = [
 
-            // { id: 1736380800002, date: '2026-06-14', description: 'Santander Brasil', amount: 20000.00, category: 'Transfer', status: 'failed' },
-            { id: 1736380800002, date: '2026-06-14', description: 'João Marco Silva', amount: 30000.00, category: 'Transfer', status: 'reversed' },
-            { id: 1736380800002, date: '2026-06-14', description: 'João Marco Silva', amount: -30000.00, category: 'Transfer', status: 'failed' },
-            { id: 1736380800002, date: '2026-06-14', description: 'João Marco Silva', amount: -30000.00, category: 'Transfer', status: 'failed' },
-            { id: 1736380800002, date: '2026-06-11', description: 'Ryan Rodriguez', amount: -50000.00, category: 'Transfer', status: 'completed' },
-            { id: 1736380800002, date: '2026-06-09', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -45000.00, category: 'Transfer', status: 'completed' },
-            { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -53000.00, category: 'Transfer', status: 'completed' },
-            // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Zelle', amount: +53000.50, category: 'Transfer', status: 'reverted' },
-            { id: 1675900800001, date: '2026-01-08', description: 'Stamp charges', amount: -5000.00, category: 'Debit', status: 'completed' },
-            { id: 1736294400004, date: '2026-01-02', description: 'Deposit', amount: 450500.00, category: 'Income', status: 'completed' },
-            { id: 1736380800003, date: '2025-12-16', description: 'Paramount Business Jets', amount: -20500.00, category: 'Flight Payment', status: 'completed' },
-            // { id: 1736380800002, date: '2025-12-18', description: 'U.S. Department of Defense', amount: -10000.82, category: 'Debit', status: 'completed' },
-            // { id: 1730764800005, date: '2025-12-05', description: 'Defense Finance and Accounting Service (DFAS)', amount: 450500.00, category: 'Credit', status: 'completed' },
-            // { id: 1725667200006, date: '2025-11-27', description: 'Withdrawal', amount: -5000.00, category: 'Insurance', status: 'completed' }
+            // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -53000.00, category: 'Transfer', status: 'completed' },
+            // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Zelle', amount: +53000.50, category: 'Transfer', status: 'reverted' },           
+            // { id: 1730764800005, date: '2026-06-12', description: 'United Nations Department Of Operational Support (DOS)', amount: 443000.50, category: 'Credit', status: 'completed' },
+            // { id: 1675900800001, date: '2026-05-31', description: 'Stamp charges', amount: -2500.00, category: 'Debit', status: 'completed' },
+            // { id: 1736380800002, date: '2026-05-19', description: 'Traders Joe', amount: -3000.50, category: 'Debit', status: 'completed' },
+            // { id: 1736294400004, date: '2026-05-16', description: 'Deposit', amount: 85000.00, category: 'Income', status: 'completed' },
+            // { id: 1736380800003, date: '2026-05-09', description: 'Paramount Business Jets', amount: -20500.00, category: 'Flight Payment', status: 'completed' },
+            // { id: 1736380800002, date: '2026-05-02', description: 'Whole Foods Market', amount: -2800.50, category: 'Debit', status: 'completed' },
+            // { id: 1736380800002, date: '2026-04-30', description: 'Apple itunes', amount: -500.00, category: 'Debit', status: 'completed' },
+            // { id: 1725667200006, date: '2026-04-24', description: 'Withdrawal', amount: -5000.00, category: 'Insurance', status: 'completed' }
         ];
 
 
@@ -1630,7 +1720,7 @@
                 description: `Transfer to ${toAccount}`,
                 amount: -amount,
                 category: 'Transfer',
-                status: 'FAILED',
+                status: 'failed',
                 details: {
                     fromAccount: fromAccount,
                     toAccount: toAccount,
@@ -1975,7 +2065,7 @@
     </script>
     <!--End of Tawk.to Script-->
 
-     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script src="language.js"></script>
 

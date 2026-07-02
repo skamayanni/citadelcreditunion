@@ -1,11 +1,23 @@
-function toggleLanguages() {
-    document.getElementById("languageMenu").classList.toggle("show");
+function toggleLanguages(button, event) {
+
+    event.stopPropagation();
+
+    button.nextElementSibling.classList.toggle("show");
+
 }
 
-window.addEventListener("click", function (e) {
-    if (!e.target.closest(".language-dropdown")) {
-        document.getElementById("languageMenu").classList.remove("show");
-    }
+document.addEventListener("click", function (e) {
+
+    document.querySelectorAll(".language-menu").forEach(menu => {
+
+        if (!menu.parentElement.contains(e.target)) {
+
+            menu.classList.remove("show");
+
+        }
+
+    });
+
 });
 
 function googleTranslateElementInit() {
@@ -18,21 +30,32 @@ function googleTranslateElementInit() {
     restoreLanguage();
 }
 
-function translateLanguage(lang, name) {
+function translateLanguage(item, event, lang, name) {
+
+    event.stopPropagation();
 
     localStorage.setItem("selectedLanguage", lang);
+
     localStorage.setItem("selectedLanguageName", name);
 
-    document.getElementById("currentLanguage").textContent = name;
+    document.querySelectorAll(".currentLanguage").forEach(el => {
+
+        el.textContent = name;
+
+    });
 
     const combo = document.querySelector(".goog-te-combo");
 
     if (combo) {
+
         combo.value = lang;
+
         combo.dispatchEvent(new Event("change"));
+
     }
 
-    document.getElementById("languageMenu").classList.remove("show");
+    item.parentElement.classList.remove("show");
+
 }
 
 function restoreLanguage() {
@@ -42,9 +65,9 @@ function restoreLanguage() {
 
     if (!lang) return;
 
-    if (document.getElementById("currentLanguage")) {
-        document.getElementById("currentLanguage").textContent = name;
-    }
+    document.querySelectorAll(".currentLanguage").forEach(el => {
+        el.textContent = name;
+    });
 
     const interval = setInterval(() => {
 

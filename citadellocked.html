@@ -8,10 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"
         rel="stylesheet">
 
-        <link rel="stylesheet" href="citadel.css">
+    <link rel="stylesheet" href="citadel.css">
 
     <style>
-        
         /* Pending Transaction Overlay */
         .pending-overlay {
             position: fixed;
@@ -71,7 +70,7 @@
         }
 
         /* Header */
-       
+
         .user-controls {
             display: flex;
             align-items: center;
@@ -1444,8 +1443,8 @@
         <div class="auth-box">
             <div class="auth-logo">
                 <div class="auth-logo">
-                <img src="img/citadel1.jpg" alt="Concora Credit Union">
-            </div>
+                    <img src="img/citadel.jpg" alt="Concora Credit Union">
+                </div>
             </div>
             <div class="auth-tabs">
                 <div class="auth-tab active" onclick="switchAuthTab('login')">Login</div>
@@ -1478,8 +1477,105 @@
     <div id="dashboard" style="display: none;">
         <!-- Header -->
         <header class="header">
-             <img src="img/citadel.jpg" alt="Concora Credit Union" class="logo">
+            <img src="img/citadel.jpg" alt="Concora Credit Union" class="logo">
             <!-- <div style="width: 739px; height: 90px; background: transparent;"></div> -->
+
+            <div class="language-dropdown desktop-only">
+                <button class="language-btn" onclick="toggleLanguages(this,event)">
+                    🌐 <span class="currentLanguage">English</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+
+                <div class="language-menu">
+
+                    <div onclick="translateLanguage(this,event,'en','English')">🇺🇸 English</div>
+
+                    <div onclick="translateLanguage(this,event,'es','Español')">🇪🇸 Español</div>
+
+                    <div onclick="translateLanguage(this,event,'fr','Français')">🇫🇷 Français</div>
+
+                    <div onclick="translateLanguage(this,event,'de','Deutsch')">🇩🇪 Deutsch</div>
+
+                    <div onclick="translateLanguage(this,event,'it','Italiano')">🇮🇹 Italiano</div>
+
+                    <div onclick="translateLanguage(this,event,'pt','Português')">🇵🇹 Português</div>
+
+                    <div onclick="translateLanguage(this,event,'ru','Русский')">🇷🇺 Русский</div>
+
+                    <div onclick="translateLanguage(this,event,'ar','العربية')">🇸🇦 العربية</div>
+
+                    <div onclick="translateLanguage(this,event,'zh-CN','中文')">🇨🇳 中文</div>
+
+                    <div onclick="translateLanguage(this,event,'ja','日本語')">🇯🇵 日本語</div>
+
+                </div>
+            </div>
+
+            <!-- Hidden Google Translator -->
+            <div id="google_translate_element" style="display:none;"></div>
+
+            <style>
+                .language-dropdown {
+                    position: relative;
+                    margin: 0 15px;
+                }
+
+                .language-btn {
+                    background: #0a2948;
+                    color: #fff;
+                    border: 1px solid rgba(255, 255, 255, .2);
+                    padding: 10px 16px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 14px;
+                    transition: .25s;
+                }
+
+                .language-btn:hover {
+                    background: #12395d;
+                }
+
+                .language-menu {
+                    display: none;
+                    position: absolute;
+                    top: 48px;
+                    right: 0;
+                    width: 220px;
+                    background: #0f172a;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    box-shadow: 0 15px 40px rgba(0, 0, 0, .2);
+                    z-index: 9999;
+                }
+
+                .language-menu.show {
+                    display: block;
+                }
+
+                .language-menu div {
+                    padding: 13px 18px;
+                    cursor: pointer;
+                    transition: .2s;
+                    font-size: 14px;
+                }
+
+                .language-menu div:hover {
+                    background: #f4f7fb;
+                }
+
+                .goog-te-banner-frame.skiptranslate {
+                    display: none !important;
+                }
+
+                body {
+                    top: 0 !important;
+                }
+            </style>
+
+
             <div class="user-controls">
                 <select class="currency-selector" id="currencySelector" onchange="changeCurrency()"
                     fdprocessedid="kzh2u45">
@@ -3030,7 +3126,7 @@
         });
     </script>
 
-     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script src="language.js"></script>
 
