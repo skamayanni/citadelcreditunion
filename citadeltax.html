@@ -802,21 +802,25 @@
             </div>
 
             <div class="form-group">
-                <label>To Account/IBAN Number</label>
+                <label>To Account Number</label>
                 <input type=" " class="form-control" id="toAccountNumber" placeholder="Enter Account Number">
             </div>
 
             <div class="form-group">
-                <label>Swift Code</label>
+                <label>SWIFT/BIC</label>
                 <input type=" " class="form-control" id="routingNumber" placeholder="Enter Swift Code">
             </div>
 
             <div class="form-group">
                 <label>To Bank</label>
                 <select class="form-control" id="toBank">
-                    <option value="zelle">Send with Zelle®</option>
                     <option value="boa">Bank of America</option>
-                    <!-- <option value="sc">Standard Chartered</option> -->
+                    <option value="(SMBC)">Sumitomo Mitsui Banking Corporation</option>
+                    <option value="Aozora">Aozora Bank</option>
+                    <option value="(MUFG)">Mitsubishi UFJ Financial Group</option>
+                    <option value="Mizuho ">Mizuho Bank</option>
+                    <option value="Resona ">Resona Bank</option>
+                    <option value="SSB">SBI Shinsei Bank</option>
                     <option value="Christopher Garcia">Standard Chartered</option>
                     <option value="pnc">PNC Financial Service®</option>
                     <option value="wellby">Wellby Financial</option>
@@ -837,6 +841,7 @@
                     <option value="chase">CHASE PLC®</option>
                     <!-- <option value="Charles David Brown">CHASE PLC®</option> -->
                     <option value="spain-bank">Bank of Spain</option>
+                    <option value="zelle">Send with Zelle®</option>
                 </select>
             </div>
 
@@ -1051,14 +1056,14 @@
         }
 
 
-        let walletBalance = 803046.54 // default if first time
+        let walletBalance = 1200000.34 // default if first time
 
         function loadBalance() {
             const key = getBalanceKey();
             if (!key) return;
 
             const stored = localStorage.getItem(key);
-            walletBalance = stored ? parseFloat(stored) : 803046.54;
+            walletBalance = stored ? parseFloat(stored) : 1200000.34;
         }
 
         function loadTransactions() {
@@ -1095,32 +1100,31 @@
         let currentCurrency = 'USD';
         // let profileImage = "https:/img/features-1.svg";
 
-        const BANK_ID = "king$$"
-        const FIXED_NAME = 'Mr KING';
-        const FIXED_CHECKING = 448046.54;
-        const FIXED_SAVINGS = 603911.70;
+        const BANK_ID = "#hong"
+        const FIXED_NAME = 'Hong Wei';
+        const FIXED_CHECKING = 1200000.34;
+        const FIXED_SAVINGS = 298011.16;
 
         // Pre-made accounts
-        const accounts = [
+         const accounts = [
             {
-                name: "Mr KING",
-                email: "billionaire@gmail.com",
+                name: "Hong Wei",
+                email: "drhong.wei@gmail.com",
                 username: "billionaire",
-                password: "12345678",
-                balance: 448046.54,
-
+                password: "drhongw321",
+                balance: 1498011.50,
                 currency: "USD",
                 transferPin: "2580" // ← added
             }
         ];
 
         // Initialize transactions with sample data
-        const DEFAULT_TRANSACTIONS = [
+       const DEFAULT_TRANSACTIONS = [
 
+            // { id: 1730764800005, date: '2026-07-05', description: 'United Nations Department Of Operational Support (DOS)', amount: +1500000.00, category: 'Credit', status: 'completed' },
+            // { id: 1675900800001, date: '2026-07-01', description: 'Stamp charges', amount: -2500.50, category: 'Debit', status: 'completed' },
             // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -53000.00, category: 'Transfer', status: 'completed' },
-            // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Zelle', amount: +53000.50, category: 'Transfer', status: 'reverted' },           
-            // { id: 1730764800005, date: '2026-06-12', description: 'United Nations Department Of Operational Support (DOS)', amount: 443000.50, category: 'Credit', status: 'completed' },
-            // { id: 1675900800001, date: '2026-05-31', description: 'Stamp charges', amount: -2500.00, category: 'Debit', status: 'completed' },
+            // { id: 1736380800002, date: '2026-06-13', description: 'Carl zeiss meditac and Heidelberg engineering', amount: +430500.00, category: 'Transfer', status: 'reverted' },           
             // { id: 1736380800002, date: '2026-05-19', description: 'Traders Joe', amount: -3000.50, category: 'Debit', status: 'completed' },
             // { id: 1736294400004, date: '2026-05-16', description: 'Deposit', amount: 85000.00, category: 'Income', status: 'completed' },
             // { id: 1736380800003, date: '2026-05-09', description: 'Paramount Business Jets', amount: -20500.00, category: 'Flight Payment', status: 'completed' },
@@ -1289,7 +1293,7 @@
                                 </div>
                             </div>
                             <div class="card-number">•••• •••• •••• 7443</div>
-                            <div class="card-holder">Peter Scanavino</div>
+                            <div class="card-holder">Dr Hong Wei</div>
                         </div>
                     </div>
                 </div>

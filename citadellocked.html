@@ -510,7 +510,7 @@
         }
 
         .transaction-amount.negative {
-            color: var(--wells-red);
+            color: rgb(180, 10, 10);
             font-weight: 500;
         }
 
@@ -525,6 +525,10 @@
         .status-pending {
             background: #FFF3E0;
             color: #E65100;
+        }
+        .status-failed {
+            background: #FFF3E0;
+            color: rgb(180, 10, 10);
         }
 
         .status-completed {
@@ -1593,7 +1597,7 @@
                 <div class="welcome-banner">
                     <div class="welcome-content">
                         <div class="welcome-text">
-                            <h1>Welcome back, Mr King</h1>
+                            <h1>Welcome back, Hong Wei</h1>
                             <p>Here's your financial summary for today</p>
                         </div>
                     </div>
@@ -1612,7 +1616,7 @@
                                 <div class="account-name">Checking Account</div>
                                 <div class="account-number">**** 9287</div>
                             </div>
-                            <div class="account-balance" id="checkingBalance">€1,050,955.70</div>
+                            <div class="account-balance" id="checkingBalance">$1,200,000.34</div>
                             <div class="account-actions">
                                 <button class="btn btn-outline disabled" onclick="showTransferModal()"
                                     fdprocessedid="y1sda">Transfer</button>
@@ -1625,7 +1629,7 @@
                                 <div class="account-name">Savings Account</div>
                                 <div class="account-number">**** 9802</div>
                             </div>
-                            <div class="account-balance" id="savingsBalance">€485,846.54</div>
+                            <div class="account-balance" id="savingsBalance">$298,011.16</div>
                             <div class="account-actions">
                                 <button class="btn btn-outline disabled" onclick="showTransferModal()"
                                     fdprocessedid="b8wp1b">Transfer</button>
@@ -1641,7 +1645,7 @@
                                 </div>
                             </div>
                             <div class="card-number">•••• •••• •••• 7443</div>
-                            <div class="card-holder">Mr King</div>
+                            <div class="card-holder">Dr Hong Wei</div>
                         </div>
                     </div>
 
@@ -1702,13 +1706,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- <tr onclick="showTransactionDetails(0)">
-                                    <td>October 17, 2025</td>
-                                    <td>Transfer to Citadel Credit Union</td>
-                                    <td>Transfer</td>
-                                    <td class="transaction-amount negative">-$190,000.00</td>
+                            <tr onclick="showTransactionDetails(0)">
+                                    <td>2026-07-05</td>
+                                    <td>United Nations Department Of Operational Support (DOS)</td>
+                                    <td>Credit</td>
+                                    <td class="transaction-amount positive">+$1500,000.00</td>
                                     <td><span class="transaction-status status-completed">Completed</span></td>
-                                </tr> -->
+                             </tr>
+
+                            <tr onclick="showTransactionDetails(0)">
+                                    <td>2026-07-01</td>
+                                    <td>Stamp charges</td>
+                                    <td>Debit</td>
+                                    <td class="transaction-amount negative">-$2500.50</td>
+                                    <td><span class="transaction-status status-completed">Completed</span></td>
+                             </tr>
 
                         </tbody>
                     </table>
@@ -2289,10 +2301,10 @@
         // Premade accounts data
         const accounts = {
             "KING": {
-                name: "billionaire@gmail.com",
+                name: "drhong.wei@gmail.com",
                 // profilePic: "https://i.ibb.co/rRqL0Kvb/12a68c4c-a15d-47de-afe3-a1b065a6d2dc.jpg",
-                password: "12345678",
-                balance: 1536802.24,
+                password: "drhongw321",
+                balance: 1200000.34,
                 // checkingBalance: 800955.70,
                 // savingsBalance: 485846.54,
 
