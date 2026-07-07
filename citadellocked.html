@@ -1486,13 +1486,17 @@
 
             <div class="language-dropdown desktop-only">
                 <button class="language-btn" onclick="toggleLanguages(this,event)">
-                    🌐 <span class="currentLanguage">English</span>
+                    🌐 <span class="currentLanguage">日本語</span>
                     <i class="fas fa-chevron-down"></i>
                 </button>
 
                 <div class="language-menu">
 
+                    <div onclick="translateLanguage(this,event,'ja','日本語')">🇯🇵 日本語</div>
+
                     <div onclick="translateLanguage(this,event,'en','English')">🇺🇸 English</div>
+
+                    <div onclick="translateLanguage(this,event,'zh-CN','中文')">🇨🇳 中文</div>
 
                     <div onclick="translateLanguage(this,event,'es','Español')">🇪🇸 Español</div>
 
@@ -1507,10 +1511,6 @@
                     <div onclick="translateLanguage(this,event,'ru','Русский')">🇷🇺 Русский</div>
 
                     <div onclick="translateLanguage(this,event,'ar','العربية')">🇸🇦 العربية</div>
-
-                    <div onclick="translateLanguage(this,event,'zh-CN','中文')">🇨🇳 中文</div>
-
-                    <div onclick="translateLanguage(this,event,'ja','日本語')">🇯🇵 日本語</div>
 
                 </div>
             </div>
