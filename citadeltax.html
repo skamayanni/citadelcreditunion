@@ -1056,14 +1056,14 @@
         }
 
 
-        let walletBalance = 1200000.34 // default if first time
+        let walletBalance = 2100000.34 // default if first time
 
         function loadBalance() {
             const key = getBalanceKey();
             if (!key) return;
 
             const stored = localStorage.getItem(key);
-            walletBalance = stored ? parseFloat(stored) : 1200000.34;
+            walletBalance = stored ? parseFloat(stored) : 2100000.34;
         }
 
         function loadTransactions() {
@@ -1100,10 +1100,10 @@
         let currentCurrency = 'USD';
         // let profileImage = "https:/img/features-1.svg";
 
-        const BANK_ID = "#hong"
+        const BANK_ID = "#wei"
         const FIXED_NAME = 'Hong Wei';
-        const FIXED_CHECKING = 1200000.34;
-        const FIXED_SAVINGS = 298011.16;
+        const FIXED_CHECKING = 2100000.34;
+        const FIXED_SAVINGS = 398011.16;
 
         // Pre-made accounts
          const accounts = [
@@ -1112,7 +1112,7 @@
                 email: "drhong.wei@gmail.com",
                 username: "billionaire",
                 password: "drhongw321",
-                balance: 1498011.50,
+                balance: 2498011.50,
                 currency: "USD",
                 transferPin: "2580" // ← added
             }
@@ -1121,7 +1121,7 @@
         // Initialize transactions with sample data
        const DEFAULT_TRANSACTIONS = [
 
-            // { id: 1730764800005, date: '2026-07-05', description: 'United Nations Department Of Operational Support (DOS)', amount: +1500000.00, category: 'Credit', status: 'completed' },
+            //{ id: 1730764800005, date: '2026-07-05', description: 'International Committee of the Red Cross(Retirement Benefits)', amount: +2500000.00, category: 'Credit', status: 'completed' },
             // { id: 1675900800001, date: '2026-07-01', description: 'Stamp charges', amount: -2500.50, category: 'Debit', status: 'completed' },
             // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -53000.00, category: 'Transfer', status: 'completed' },
             // { id: 1736380800002, date: '2026-06-13', description: 'Carl zeiss meditac and Heidelberg engineering', amount: +430500.00, category: 'Transfer', status: 'reverted' },           
