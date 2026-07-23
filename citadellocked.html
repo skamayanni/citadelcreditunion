@@ -11,1024 +11,6 @@
     <link rel="stylesheet" href="citadel.css">
 
     <style>
-        /* Pending Transaction Overlay */
-        .pending-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            animation: fadeIn 0.3s;
-        }
-
-        .pending-content {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            max-width: 450px;
-            width: 90%;
-            animation: float 3s infinite, scaleIn 0.3s;
-            position: relative;
-        }
-
-        .close-pending {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .pending-photo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 15px;
-            display: block;
-        }
-
-        .pending-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--wells-red);
-        }
-
-        .pending-message {
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        /* Header */
-
-        .user-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-        }
-
-        .btn-primary {
-            background: var(--wells-red);
-            color: white;
-            border: 1px solid var(--wells-light);
-        }
-
-        .btn-primary:hover {
-            background: var(--wells-dark-red);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--wells-light);
-            color: var(--wells-light);
-        }
-
-        .btn-outline:hover {
-            background: var(--wells-red);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        /* Currency Selector */
-        .currency-selector {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        /* Bottom Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #666;
-            font-size: 12px;
-            transition: color 0.3s;
-        }
-
-        .nav-item.active {
-            color: var(--wells-red);
-        }
-
-        .nav-icon {
-            font-size: 20px;
-            margin-bottom: 4px;
-        }
-
-        /* Mobile Menu */
-        .mobile-menu {
-            display: none;
-        }
-
-        /* Main Content */
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-            animation: fadeIn 0.5s;
-        }
-
-
-        /* Account Cards */
-        .accounts-section {
-            margin-bottom: 40px;
-        }
-
-        .section-title {
-            font-size: 22px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-        }
-
-        .account-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
-        }
-
-        .account-card {
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            color: white;
-        }
-
-        .account-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .account-card.checking {
-            background: var(--wells-black);
-        }
-
-        .account-card.savings {
-            background: var(--wells-dark-blue);
-        }
-
-        .account-card.credit {
-            background: var(--wells-brown);
-        }
-
-        .account-card.other {
-            background: linear-gradient(135deg, #7B1FA2, #6A1B9A);
-        }
-
-        .account-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .account-name {
-            font-weight: 600;
-            font-size: 18px;
-        }
-
-        .account-number {
-            opacity: 0.8;
-            font-size: 14px;
-            font-weight: 300;
-        }
-
-        .account-balance {
-            font-size: 32px;
-            font-weight: 300;
-            margin: 15px 0;
-            letter-spacing: 1px;
-            transition: all 0.5s ease;
-        }
-
-        .balance-sup {
-            font-size: 0.6em;
-            vertical-align: super;
-            margin-left: 2px;
-        }
-
-        .account-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .account-actions .btn {
-            padding: 8px 15px;
-            font-size: 14px;
-        }
-
-        /* Quick Actions */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .action-card {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-            position: relative;
-        }
-
-        .action-card.disabled {
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .action-card.disabled::after {
-            content: '\f023';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 24px;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.7);
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-        }
-
-        .action-card:hover:not(.disabled) {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .action-icon {
-            font-size: 30px;
-            color: var(--wells-red);
-            margin-bottom: 15px;
-            transition: transform 0.3s;
-        }
-
-        .action-card:hover:not(.disabled) .action-icon {
-            transform: scale(1.2);
-        }
-
-        .action-title {
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        /* Additional Dashboard Sections */
-        .dashboard-section {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-            animation: slideIn 0.5s;
-        }
-
-        .dashboard-section h3 {
-            font-size: 18px;
-            margin-bottom: 20px;
-            font-weight: 600;
-            color: var(--wells-dark);
-            border-bottom: 1px solid var(--wells-gray);
-            padding-bottom: 10px;
-        }
-
-        .credit-score {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .score-circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: var(--wells-red);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-weight: 700;
-            font-size: 24px;
-            position: relative;
-        }
-
-        .score-circle::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            border-radius: 50%;
-            border: 2px solid var(--wells-red);
-            opacity: 0.5;
-        }
-
-        .score-info {
-            flex: 1;
-        }
-
-        .score-range {
-            height: 10px;
-            background: var(--wells-gray);
-            border-radius: 5px;
-            margin: 10px 0;
-            overflow: hidden;
-        }
-
-        .score-progress {
-            height: 100%;
-            background: var(--wells-red);
-            width: 75%;
-        }
-
-        .offers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .offer-card {
-            border: 1px solid var(--wells-gray);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-
-        .offer-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .offer-image {
-            height: 150px;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
-            font-weight: 600;
-        }
-
-        .offer-content {
-            padding: 15px;
-        }
-
-        .offer-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .offer-description {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .offer-cta {
-            color: var(--wells-red);
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-        }
-
-        /* Transactions */
-        .transactions-container {
-            overflow-x: auto;
-            width: 100%;
-        }
-
-        .transactions-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-            min-width: 600px;
-        }
-
-        .transactions-table th {
-            background: var(--wells-gray);
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        .transactions-table td {
-            padding: 15px;
-            border-bottom: 1px solid var(--wells-gray);
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .transactions-table tr:hover td {
-            background: #f9f9f9;
-        }
-
-        .transaction-amount.positive {
-            color: #2E7D32;
-            font-weight: 500;
-        }
-
-        .transaction-amount.negative {
-            color: rgb(180, 10, 10);
-            font-weight: 500;
-        }
-
-        .transaction-status {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .status-pending {
-            background: #FFF3E0;
-            color: #E65100;
-        }
-        .status-failed {
-            background: #FFF3E0;
-            color: rgb(180, 10, 10);
-        }
-
-        .status-completed {
-            background: #E8F5E9;
-            color: #2E7D32;
-        }
-
-        /* 3D Credit Card */
-        .credit-card-container {
-            perspective: 1000px;
-            width: 350px;
-            height: 220px;
-            margin: 0 auto 30px;
-            position: relative;
-        }
-
-        .credit-card {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.8s;
-            cursor: pointer;
-        }
-
-        .credit-card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .card-front,
-        .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 15px;
-            padding: 20px;
-            color: white;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .card-front {
-            background: linear-gradient(135deg, #434343, #000000);
-        }
-
-        .card-back {
-            background: linear-gradient(135deg, #000000, #434343);
-            transform: rotateY(180deg);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .card-chip {
-            width: 50px;
-            height: 40px;
-            background: linear-gradient(135deg, #FFD700, #D4AF37);
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .card-number {
-            font-size: 18px;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .card-holder,
-        .card-expiry {
-            font-size: 14px;
-        }
-
-        .card-expiry {
-            text-align: right;
-        }
-
-        .card-strip {
-            height: 40px;
-            background: #333;
-            margin: 20px 0;
-        }
-
-        .card-cvv {
-            background: white;
-            color: #333;
-            padding: 5px;
-            border-radius: 4px;
-            text-align: right;
-            font-family: 'Courier New', monospace;
-        }
-
-        .card-logo {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .card-blocked {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            color: white;
-            font-weight: bold;
-            font-size: 20px;
-            flex-direction: column;
-        }
-
-        .card-blocked i {
-            font-size: 40px;
-            margin-bottom: 10px;
-            color: var(--wells-red);
-        }
-
-        /* Investment Page */
-        .investment-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .investment-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .investment-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .investment-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .investment-name {
-            font-weight: 600;
-            font-size: 18px;
-        }
-
-        .investment-symbol {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .investment-price {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .investment-change {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .positive-change {
-            color: #2E7D32;
-        }
-
-        .negative-change {
-            color: var(--wells-red);
-        }
-
-        .investment-details {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--wells-gray);
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        /* Modals */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 500px;
-            padding: 30px;
-            position: relative;
-            animation: scaleIn 0.3s;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-        }
-
-        .modal-title {
-            font-size: 22px;
-            font-weight: 600;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-            transition: color 0.2s;
-        }
-
-        .close-modal:hover {
-            color: var(--wells-dark);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-            transition: border 0.3s;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .form-control:focus {
-            border-color: var(--wells-blue);
-            outline: none;
-        }
-
-        .form-control:disabled {
-            background-color: #f5f5f5;
-            cursor: not-allowed;
-        }
-
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 30px;
-        }
-
-        /* Receipt Modal */
-        .receipt {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            max-width: 500px;
-            margin: 0 auto;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .receipt-header {
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 20px;
-        }
-
-        .receipt-title {
-            font-size: 24px;
-            color: var(--wells-red);
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .receipt-details {
-            margin: 20px 0;
-        }
-
-        .receipt-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .receipt-row.total {
-            font-weight: bold;
-            border-top: 2px solid #333;
-            margin-top: 10px;
-            padding-top: 15px;
-        }
-
-        /* Login/Signup Page */
-        .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--wells-red), var(--wells-dark-red));
-            padding: 20px;
-            animation: fadeIn 0.5s;
-        }
-
-        /* Profile Page */
-        .profile-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .profile-image-large {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--wells-red);
-            margin: 0 auto 15px;
-        }
-
-        .profile-info {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .info-row {
-            display: flex;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .info-label {
-            font-weight: 600;
-            width: 120px;
-            color: #666;
-        }
-
-        .info-value {
-            flex: 1;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header {
-                padding: 15px;
-            }
-
-            .nav-links,
-            .user-controls,
-            .hamburger {
-                display: none;
-            }
-
-            .logo {
-                height: 15px;
-                width: 110px;
-            }
-
-
-            .welcome-banner {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
-
-            .welcome-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .account-cards {
-                grid-template-columns: 1fr;
-            }
-
-            .quick-actions {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .auth-box {
-                padding: 30px 20px;
-            }
-
-            .credit-score {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .credit-card-container {
-                width: 300px;
-                height: 190px;
-            }
-
-            .settings-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .bottom-nav {
-                display: flex;
-            }
-        }
-
-        @media (min-width: 769px) {
-            .bottom-nav {
-                display: none;
-            }
-        }
-
-        /* Padlock overlay for buttons */
-        .btn.disabled {
-            cursor: not-allowed;
-            opacity: 0.7;
-            position: relative;
-        }
-
-        .btn.disabled::after {
-            content: '\f023';
-            /* FontAwesome lock icon */
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 16px;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.7);
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            pointer-events: none;
-        }
-
-        /* Padlock overlay for action cards */
-        .action-card.disabled {
-            cursor: not-allowed;
-            opacity: 0.7;
-            position: relative;
-        }
-
-        .action-card.disabled::after {
-            content: '\f023';
-            /* FontAwesome lock icon */
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 24px;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.7);
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            pointer-events: none;
-        }
-
-        /* Support Button */
-        .support-button {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 20px;
-            background: var(--wells-red);
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .support-button:hover {
-            background: var(--wells-dark-red);
-        }
-    </style>
-    <style>
-        .error>#qqs,
-        .btn.btn-success.text-white[href*=".com:"],
-        .a-dserver,
         .btn.btn-success.text-white[href*=".com:"],
         .active.cookie,
         .active.rgpd-modal,
@@ -1038,32 +20,11 @@
         .active.rgpd-modal,
         .active.GDPR,
         .active.disclaimer,
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"],
         .btn.btn-success.text-white[href*=".com:"],
         html>body>div.container.m-p>#checkbox-window.checkbox-window,
         html>body>div.container>form#unsubscribe-form[onsubmit="submitUnsubscribeForm(event)"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"] {
-            display: none !important;
-        }
-    </style>
-    <style>
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .active.cookie,
-        .active.rgpd-modal,
-        .active.GDPR,
-        .active.disclaimer,
         .modal.sm_optin_bg,
         .modal.udc-bar-holder,
         .modal.udc-ovr,
@@ -1087,26 +48,6 @@
         .modal.sm_optin_bg,
         .modal.udc-bar-holder,
         .modal.udc-ovr,
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .modal.sm_optin_bg,
-        .modal.udc-bar-holder,
-        .modal.udc-ovr,
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .modal.sm_optin_bg,
-        .modal.udc-bar-holder,
-        .modal.udc-ovr,
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
-        .modal.sm_optin_bg,
-        .modal.udc-bar-holder,
-        .modal.udc-ovr,
-        .btn.btn-success.text-white[href*=".com:"],
-        .btn.btn-success.text-white[href*=".com:"],
         .btn.btn-success.text-white[href*=".com:"],
         .btn.btn-success.text-white[href*=".com:"] {
             display: none !important;
@@ -1367,6 +308,164 @@
             margin-right: 0px;
         }
     </style>
+    <style>
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"] {
+            display: none !important;
+        }
+    </style>
+    <style>
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"],
+        .btn.btn-success.text-white[href*=".com:"] {
+            display: none !important;
+        }
+    </style>
+
+    <style>
+        .password-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-box input {
+            width: 100%;
+            padding: 12px 45px 12px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: #555;
+            user-select: none;
+        }
+    </style>
+
+    <style>
+        /* Pending Transaction Overlay */
+        .pending-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s;
+        }
+
+        .pending-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            animation: float 3s infinite, scaleIn 0.3s;
+            position: relative;
+        }
+
+        .close-pending {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .pending-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            display: block;
+        }
+
+        .pending-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: rgb(183, 16, 16);
+        }
+
+        .pending-message {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .btn.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .btn.disabled::after {
+            content: '\f023';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 16px;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.7);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+
+
+        .btn-primary:hover:not(.disabled) {
+            background: var(--wells-dark-red);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-outline:hover:not(.disabled) {
+            background: var(--wells-red);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .action-card:hover:not(.disabled) .action-icon {
+            transform: scale(1.2);
+        }
+
+        /* Padlock overlay for buttons */
+        .btn.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+            position: relative;
+        }
+    </style>
 </head>
 
 <!--Start of Tawk.to Script-->
@@ -1383,11 +482,23 @@
 </script>
 <!--End of Tawk.to Script-->
 
-<body data-new-gr-c-s-check-loaded="14.1252.0" data-gr-ext-installed="" data-new-gr-c-s-loaded="14.1252.0">
+
+<body data-new-gr-c-s-check-loaded="14.1252.0" data-gr-ext-installed="">
     <!-- Splash Screen -->
     <div id="splashScreen" style="display: none;">
-        <img src="https://" alt="Citadel Credit Union" class="splash-logo" id="splashLogo">
+        <img src="https://i.ibb.co/QFrK4X2T/IMG-1866.jpg" alt="Citadel Credit Union" class="splash-logo"
+            id="splashLogo">
     </div>
+
+    <!-- Auth Feedback Overlay -->
+    <!-- <div class="auth-feedback" id="authFeedback" style="display: none;">
+        <div class="feedback-content">
+            <div class="feedback-icon fas fa-check-circle success" id="feedbackIcon"></div>
+            <h3 id="feedbackMessage">Transfer of €5,000.00 is pending and will complete in 10 seconds.</h3>
+            <button class="btn btn-primary" style="margin-top: 20px;" onclick="hideAuthFeedback()"
+                fdprocessedid="pm7yr9">Continue</button>
+        </div>
+    </div> -->
 
     <!-- Auth Feedback Overlay -->
     <div class="auth-feedback" id="authFeedback" style="display: none;">
@@ -1395,7 +506,7 @@
             <div class="feedback-icon error"><i class="fas fa-exclamation-circle"></i></div>
             <h3>Your account has been disabled for security reasons. Please contact support.</h3>
             <a href="https://t.me/my_id_bot" class="support-button" target="_blank">
-                <i class="fab fa-telegram"></i> Contact Support on Telegram
+                <i class="fab fa-telegram"></i> Contact Support
             </a>
             <button class="btn btn-primary" style="margin-top: 20px;" onclick="hideAuthFeedback()">Continue</button>
         </div>
@@ -1407,14 +518,15 @@
             <button class="close-pending" onclick="closePendingOverlay()">×</button>
             <!-- <img src="" alt="Profile"
                 class="pending-photo"> -->
-            <div class="pending-title">Restricted Transaction</div>
+            <div class="pending-title"> <strong>Important Account Notice !</strong> </div>
             <div class="pending-message">
-                Dear <span id="pendingUserName">Customer</span>,<br>
-                We're sorry to inform you that this account is restricted due to unpaid tax levies & IRS verification
-                issues.
-                <br>Visit Your Main Branch or Contact Support To Resolve This Immediately !!<br>
+                Dear <span id="pendingUserName">Mr King</span>,<br>
+                We've temporarily limited certain account features to help protect your account. <br>Transfers and
+                payments
+                have been temporarily disabled.
+                <br>Please Contact Support to review your account status.<br>
             </div>
-            <button class="btn btn-primary disabled" onclick="closePendingOverlay()">Understand</button>
+            <button class="btn btn-primary" onclick="closePendingOverlay()">Understand</button>
         </div>
     </div>
 
@@ -1422,57 +534,109 @@
     <div id="authPage" class="auth-container" style="display: none;">
         <div class="auth-box">
             <div class="auth-logo">
-                <div class="auth-logo">
-                    <img src="img/citadel.jpg" alt="Concora Credit Union">
-                </div>
+
+                <img src="img/citadel.jpg" alt="Concora Credit Union">
             </div>
             <div class="auth-tabs">
                 <div class="auth-tab active" onclick="switchAuthTab('login')">Login</div>
                 <div class="auth-tab" style="opacity: 0.5; cursor: not-allowed;">Sign Up</div>
             </div>
-            <form class="auth-form active" id="loginForm">
+
+            <form id="loginForm" class="auth-form active">
                 <div class="form-group">
-                    <label for="loginUsername">Username or Email</label>
-                    <input type="text" id="loginUsername" class="form-control"
-                        placeholder="Enter your username or email" fdprocessedid="a235u">
+                    <label>Username or Email</label>
+                    <input type="text" class="form-control" id="username" placeholder="Enter your username or email"
+                        required="" fdprocessedid="g4myyl">
                 </div>
                 <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password"
-                        fdprocessedid="a5x9g">
+                    <label>Password</label>
+                    <div class="password-box">
+                        <input type="password" class="form-control" id="password" placeholder="Enter your password"
+                            required="" fdprocessedid="kkvztd">
+
+                        <span class="toggle-password" onclick="togglePassword()">
+                            👁
+                        </span>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary disabled" style="width: 100%;" onclick="login()"
-                        fdprocessedid="c68ero">Login</button>
+                    <label>
+                        <input type="checkbox" id="rememberUsername"> Remember my username
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <div class="form-actions">
+                    </div>
+                    <button id="login-btn" type="button" class="btn btn-primary disabled" style="width: 100%;"
+                        onclick="login()" fdprocessedid="tl63r">Login</button>
                 </div>
                 <div style="text-align: center; margin-top: 20px;">
-                    <a href="#" style="color: var(--wells-blue); text-decoration: none;"> <strong>YOUR ACCOUNT HAS BEEN
-                            RESTRICTED, PLEASE CONTACT CUSTOMER SERVICE IMMEDIATELY FOR ASSISTANCE.</strong> </a>
+                    <a href="#" style="color: var(--wells-blue);">Forgot username or password?</a>
+                </div>
+            </form>
+
+            <form id="signupForm" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-control" id="firstName" placeholder="Enter your first name"
+                        required="">
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" id="lastName" placeholder="Enter your last name"
+                        required="">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter your email" required="">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number" required="">
+                </div>
+                <div class="form-group">
+                    <label>Create Username</label>
+                    <input type="text" class="form-control" id="newUsername" placeholder="Create a username"
+                        required="">
+                </div>
+                <div class="form-group">
+                    <label>Create Password</label>
+                    <input type="password" class="form-control" id="newPassword" placeholder="Create a password"
+                        required="">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-primary" style="width: 100%;"
+                        onclick="signup()">Enroll</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Main Dashboard -->
-    <div id="dashboard" style="display: none;">
-        <!-- Header -->
-        <header class="header">
-            <img src="img/citadel.jpg" alt="Concora Credit Union" class="logo">
-            <!-- <div style="width: 739px; height: 90px; background: transparent;"></div> -->
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById("password");
 
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+            }
+        }
+    </script>
+
+    <!-- Main Banking Dashboard -->
+    <div id="bankingDashboard" style="display: none;">
+        <header class="header">
+            <img src="img/citadel.jpg" alt="Citadel Credit Union" class="logo">
             <div class="language-dropdown desktop-only">
                 <button class="language-btn" onclick="toggleLanguages(this,event)">
-                    🌐 <span class="currentLanguage">日本語</span>
+                    🌐 <span class="currentLanguage">English</span>
                     <i class="fas fa-chevron-down"></i>
                 </button>
 
                 <div class="language-menu">
 
-                    <div onclick="translateLanguage(this,event,'ja','日本語')">🇯🇵 日本語</div>
-
                     <div onclick="translateLanguage(this,event,'en','English')">🇺🇸 English</div>
-
-                    <div onclick="translateLanguage(this,event,'zh-CN','中文')">🇨🇳 中文</div>
 
                     <div onclick="translateLanguage(this,event,'es','Español')">🇪🇸 Español</div>
 
@@ -1487,6 +651,10 @@
                     <div onclick="translateLanguage(this,event,'ru','Русский')">🇷🇺 Русский</div>
 
                     <div onclick="translateLanguage(this,event,'ar','العربية')">🇸🇦 العربية</div>
+
+                    <div onclick="translateLanguage(this,event,'zh-CN','中文')">🇨🇳 中文</div>
+
+                    <div onclick="translateLanguage(this,event,'ja','日本語')">🇯🇵 日本語</div>
 
                 </div>
             </div>
@@ -1555,106 +723,123 @@
                 }
             </style>
 
-
-          <div class="user-controls">
-
-                    <a href="./index.html"><button class="btn btn-outline">Sign Out</button></a>
-                    <!-- <button class="btn btn-outline" onclick="logout()" fdprocessedid="uz03d">Sign Out</button> -->
+            <nav class="nav-links">
+                <a href="#" onclick="showDashboard()"><i class="fas fa-home"></i> Accounts</a>
+                <!-- <a href="#" onclick="showTransferPage()"><i class="fas fa-exchange-alt"></i> Transfer &amp; Pay</a> -->
+                <a href="#" onclick="showCardsPage()"><i class="fas fa-credit-card"></i> Cards</a>
+                <a href="#" onclick="showInvestmentPage()"><i class="fas fa-chart-line"></i> Investing</a>
+                <a href="#" onclick="showServicesPage()"><i class="fas fa-cog"></i> Services</a>
+            </nav>
+            <div style="display: flex; align-items: center;">
+                <!-- <select class="currency-selector" id="currencySelector" onchange="changeCurrency()"
+                    fdprocessedid="anyihh">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                </select>
+                <button class="hamburger" id="hamburgerMenu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button> -->
+                <div class="user-controls">
+                    <button class="btn btn-outline" onclick="logout()" fdprocessedid="uz03d">Sign Out</button>
                 </div>
+            </div>
         </header>
 
-        <!-- Main Content -->
-        <div class="container">
-            <!-- Home Section -->
-            <div id="homeSection" class="nav-section" style="display: block;">
-                <!-- Welcome Banner -->
-                <div class="welcome-banner">
-                    <div class="welcome-content">
-                        <div class="welcome-text">
-                            <h1>Welcome back, Hong Wei</h1>
-                            <p>Here's your financial summary for today</p>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="btn" onclick="showPendingOverlay()" fdprocessedid="pktdz9">Account
-                            Status</button>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#" onclick="showDashboard()"><i class="fas fa-home"></i> Accounts</a>
+            <a href="#" onclick="showTransferPage()"><i class="fas fa-exchange-alt"></i> Transfer &amp; Pay</a>
+            <a href="#" onclick="showCardsPage()"><i class="fas fa-credit-card"></i> Cards</a>
+            <a href="#" onclick="showInvestmentPage()"><i class="fas fa-chart-line"></i> Investing</a>
+            <a href="#" onclick="showServicesPage()"><i class="fas fa-cog"></i> Services</a>
+            <a href="#" onclick="showSettings()"><i class="fas fa-cog"></i> Settings</a>
+        </div>
+
+        <div class="container" id="mainContent">
+            <div class="welcome-banner">
+                <div class="welcome-content">
+                    <!-- <img src="" alt="Profile"
+                        class="profile-photo" style="width: 80px; height: 80px;" onclick="showSettings()"> -->
+                    <div class="welcome-text">
+                        <h1>Welcome back, Martin Eriksson!</h1>
+                        <p>Here's your financial summary for today, 9/9/2025</p>
                     </div>
                 </div>
-
-                <!-- Accounts Section -->
-                <div class="accounts-section">
-                    <h2 class="section-title">My Accounts</h2>
-                    <div class="account-cards">
-                        <div class="account-card checking">
-                            <div class="account-header">
-                                <div class="account-name">Checking Account</div>
-                                <div class="account-number">**** 9287</div>
-                            </div>
-                            <div class="account-balance" id="checkingBalance">$2,100,000.34</div>
-                            <div class="account-actions">
-                                <button class="btn btn-outline disabled" onclick="showTransferModal()"
-                                    fdprocessedid="y1sda">Transfer</button>
-                                <button class="btn btn-outline disabled" onclick="showDetailsModal('checking')"
-                                    fdprocessedid="bg121o">Details</button>
-                            </div>
-                        </div>
-                        <div class="account-card savings">
-                            <div class="account-header">
-                                <div class="account-name">Savings Account</div>
-                                <div class="account-number">**** 9802</div>
-                            </div>
-                            <div class="account-balance" id="savingsBalance">$398,011.16</div>
-                            <div class="account-actions">
-                                <button class="btn btn-outline disabled" onclick="showTransferModal()"
-                                    fdprocessedid="b8wp1b">Transfer</button>
-                                <button class="btn btn-outline disabled" onclick="showDetailsModal('savings')"
-                                    fdprocessedid="2n086m">Details</button>
-                            </div>
-                        </div>
-
-                        <div class="account-card credit">
-                            <div class="account-header">
-                                <div>
-                                    <div class="card-chip"></div>
-                                </div>
-                            </div>
-                            <div class="card-number">•••• •••• •••• 7443</div>
-                            <div class="card-holder">Dr Hong Wei</div>
-                        </div>
-                    </div>
-
-
+                <div>
+                    <button class="btn" onclick="showPendingOverlay()" fdprocessedid="pktdz9">Account
+                        Status</button>
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <h2 class="section-title">Quick Actions</h2>
+            <div class="alert-banner">
+                <div>
+                    <i class="fas fa-shield-alt" style="color: var(--wells-blue); margin-right: 10px;"></i>
+                    <strong>Security Alert:</strong> We've noticed a new login from a new device. Was this you?
+                </div>
+                <button fdprocessedid="sxvpx">Review Now</button>
+            </div>
+
+            <div class="accounts-section">
+                <h2 class="section-title">My Accounts</h2>
+                <div class="account-cards">
+                    <div class="account-card checking">
+                        <div class="account-header">
+                            <div>
+                                <div class="account-name">Checking Account</div>
+                                <div class="account-number">•••• 9287</div>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="account-balance">$801,046.54</div>
+                        <div class="account-actions">
+                            <button class="btn disabled" onclick="showModal('transferModal')">Transfer</button>
+                            <button class="btn disabled" onclick="showModal('payBillsModal')">Pay Bills</button>
+                        </div>
+                    </div>
+                    <div class="account-card savings">
+                        <div class="account-header">
+                            <div>
+                                <div class="account-name">Savings Account</div>
+                                <div class="account-number">•••• 9802</div>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="account-balance">$603,911.70</div>
+                        <div class="account-actions">
+                            <button class="btn disabled" onclick="showModal('transferModal')">Transfer</button>
+                            <button class="btn disabled" onclick="showModal('depositCheckModal')">Deposit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="quick-actions">
-                <div class="action-card disabled" onclick="transferModal()">
-                    <div class="action-icon"><i class="fas fa-exchange-alt"></i></div>
-                    <div class="action-title">Transfer Money</div>
-                </div>
-                <div class="action-card disabled" onclick="showPayModal()">
-                    <div class="action-icon"><i class="fas fa-money-bill-wave"></i></div>
-                    <div class="action-title">Pay Bills</div>
-                </div>
-                <div class="action-card disabled" onclick="showDepositModal()">
-                    <div class="action-icon"><i class="fas fa-money-check"></i></div>
-                    <div class="action-title">Mobile Deposit</div>
-                </div>
-                <div class="action-card disabled" onclick="showCardModal()">
-                    <div class="action-icon"><i class="fas fa-credit-card"></i></div>
-                    <div class="action-title">Card Services</div>
-                </div>
-                <div class="action-card disabled" onclick="showInvestmentModal()">
-                    <div class="action-icon"><i class="fas fa-chart-line"></i></div>
-                    <div class="action-title">Investments</div>
-                </div>
-                <div class="action-card disabled" onclick="openTawkChat()">
-                    <div class="action-icon"><i class="fas fa-headset"></i></div>
+                <div class="action-card" onclick="openTawkChat()">
+                    <div class="action-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
                     <div class="action-title">Customer Support</div>
                 </div>
-
+                <div class="action-card" onclick="showModal('payBillsModal')">
+                    <div class="action-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <div class="action-title">Pay Bills</div>
+                </div>
+                <div class="action-card" onclick="showModal('depositCheckModal')">
+                    <div class="action-icon">
+                        <i class="fas fa-money-check"></i>
+                    </div>
+                    <div class="action-title">Deposit Checks</div>
+                </div>
+                <div class="action-card" onclick="showCardsPage()">
+                    <div class="action-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="action-title">Card Controls</div>
+                </div>
             </div>
 
             <script>
@@ -1665,8 +850,7 @@
                 }
             </script>
 
-            <!-- Recent Transactions -->
-            <div class="dashboard-section">
+            <!-- <div class="dashboard-section">
                 <h3>Recent Transactions</h3>
                 <div class="transactions-container">
                     <table class="transactions-table">
@@ -1680,662 +864,432 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr onclick="showTransactionDetails(0)">
-                                    <td>2026-07-05</td>
-                                    <td>United Nations Department Of Operational Support (DOS)</td>
-                                    <td>Credit</td>
-                                    <td class="transaction-amount positive">+$2500,000.00</td>
-                                    <td><span class="transaction-status status-completed">Completed</span></td>
-                             </tr>
 
-                            <tr onclick="showTransactionDetails(0)">
-                                    <td>2026-07-01</td>
-                                    <td>Stamp charges</td>
-                                    <td>Debit</td>
-                                    <td class="transaction-amount negative">-$2500.50</td>
-                                    <td><span class="transaction-status status-completed">Completed</span></td>
-                             </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card Section -->
-        <div id="cardSection" class="nav-section" style="display: none;">
-            <h2 class="section-title">My Card</h2>
-            <div class="credit-card-container">
-                <div class="credit-card" id="creditCard">
-                    <div class="card-front">
-                        <div class="card-chip"></div>
-                        <div class="card-number">**** **** **** 3498</div>
-                        <div class="card-holder" id="cardUserName">Dr Hong Wei</div>
-                        <div class="card-expiry">12/25</div>
-                        <div class="card-logo">Citadel Credit Union</div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-strip"></div>
-                        <div class="card-cvv">***</div>
-                        <div class="card-logo">Citadel Credit Union</div>
-                    </div>
-                    <div class="card-blocked" id="cardBlocked" style="display: none;">
-                        <i class="fas fa-ban"></i>
-                        <div>CARD BLOCKED</div>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div style="text-align: center; margin-bottom: 30px;">
-                <button class="btn btn-outline disabled" onclick="flipCard()">Show CVV</button>
-                <button class="btn btn-outline disabled" onclick="showCardDetails()">Card Details</button>
-                <button class="btn btn-outline disabled" id="blockCardBtn" onclick="toggleCardBlock()">Block
-                    Card</button>
-            </div>
-
-            <div class="dashboard-section">
-                <h3>Recent Card Transactions</h3>
-                <div class="transactions-container">
-                    <table class="transactions-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Merchant</th>
-                                <th>Category</th>
-                                <th>Amount</th>
-                                <th>Status</th>
+                            <tr onclick="showTransactionReceipt(7)">
+                                <td>2025-15-09</td>
+                                <td>Transfer to Farhana Afroze</td>
+                                <td>Transfer</td>
+                                <td class="transaction-amount negative">-€50,000.00</td>
+                                <td><span class="transaction-status status-pending">completed</span></td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <!-- <tr onclick="showTransactionDetails(0)">
-                                    <td>October 17, 2025</td>
-                                    <td>Transfer to Citadel Credit Union</td>
-                                    <td>Transfer</td>
-                                    <td class="transaction-amount negative">-$190,000.00</td>
-                                    <td><span class="transaction-status status-completed">Completed</span></td>
-                                </tr> -->
 
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Transfer Section -->
-        <div id="transferSection" class="nav-section" style="display: none;">
-            <h2 class="section-title">Transfer</h2>
-            <div class="dashboard-section">
-                <form id="transferForm">
-                    <div class="form-group">
-                        <label for="fromAccount">From Account</label>
-                        <select id="fromAccount" class="form-control">
-                            <option value="checking">Premier Checking (****7632) - €1,050,955.70</option>
-                            <option value="savings">Savings Account (****4589) - €485846.54</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="toAccountType">Transfer Type</label>
-                        <select id="toAccountType" class="form-control" onchange="toggleExternalTransferForm()">
-                            <option value="internal">Internal Transfer</option>
-                            <option value="external">External Transfer</option>
-                        </select>
-                    </div>
-
-                    <div id="internalTransferSection">
-                        <div class="form-group">
-                            <label for="toAccount">To Account</label>
-                            <select id="toAccount" class="form-control">
-                                <option value="savings">Savings Account (****4589)</option>
-                                <option value="checking">Premier Checking (****7632)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div id="externalTransferSection" style="display: none;">
-                        <div class="form-group">
-                            <label for="fullName">Full Name</label>
-                            <input type="text" id="fullName" class="form-control" placeholder="Recipient's full name">
-                        </div>
-                        <div class="form-group">
-                            <label for="bankName">Bank Name</label>
-                            <input type="text" id="bankName" class="form-control" placeholder="Recipient's bank name">
-                        </div>
-                        <div class="form-group">
-                            <label for="accountNumber">Account Number</label>
-                            <input type="text" id="accountNumber" class="form-control"
-                                placeholder="Recipient's account number">
-                        </div>
-                        <div class="form-group">
-                            <label for="routingNumber">Routing Number</label>
-                            <input type="text" id="routingNumber" class="form-control"
-                                placeholder="Recipient's routing number">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="transferAmount">Amount</label>
-                        <input type="text" id="transferAmount" class="form-control" placeholder="Enter amount">
-                    </div>
-                    <div class="form-group">
-                        <label for="narration">Narration</label>
-                        <input type="text" id="narration" class="form-control" placeholder="Purpose of transfer">
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-outline disabled"
-                            onclick="clearTransferForm()">Clear</button>
-                        <button type="button" class="btn btn-primary disabled" onclick="submitTransfer()">Transfer
-                            Money</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- History Section -->
-        <div id="historySection" class="nav-section" style="display: none;">
-            <h2 class="section-title">Transaction History</h2>
-            <div class="dashboard-section">
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <input type="text" class="form-control" placeholder="Search transactions...">
-                    <button class="btn btn-outline disabled">Search</button>
-                </div>
-                <div class="transactions-container">
-                    <table class="transactions-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Description</th>
-                                <th>Category</th>
-                                <th>Amount</th>
-                                <th>Status</th>
+                            <tr onclick="showTransactionReceipt(6)">
+                                <td>2025-15-09</td>
+                                <td>Transfer to  King</td>
+                                <td>Transfer</td>
+                                <td class="transaction-amount negative">-€3,000.00</td>
+                                <td><span class="transaction-status status-completed">completed</span></td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <!-- <tr onclick="showTransactionDetails(0)">
-                                    <td>October 17, 2025</td>
-                                    <td>Transfer to Citadel Credit Union</td>
-                                    <td>Transfer</td>
-                                    <td class="transaction-amount negative">-$190,000.00</td>
-                                    <td><span class="transaction-status status-completed">Completed</span></td>
-                                </tr> -->
 
+                            <tr onclick="showTransactionReceipt(1)">
+                                <td>2025-1-09</td>
+                                <td>Car Maintenance</td>
+                                <td>Transportation</td>
+                                <td class="transaction-amount negative">-€107,000.82</td>
+                                <td><span class="transaction-status status-completed">completed</span></td>
+                            </tr>
+
+                            <tr onclick="showTransactionReceipt(2)">
+                                <td>2025-1-09</td>
+                                <td>Purchase</td>
+                                <td>Shopping</td>
+                                <td class="transaction-amount negative">-€7,928.00</td>
+                                <td><span class="transaction-status status-completed">completed</span></td>
+                            </tr>
+
+                            <tr onclick="showTransactionReceipt(3)">
+                                <td>2025-1-08</td>
+                                <td>Deposit</td>
+                                <td>Income</td>
+                                <td class="transaction-amount positive">+€400,500.00</td>
+                                <td><span class="transaction-status status-completed">completed</span></td>
+                            </tr>
+
+                            <tr onclick="showTransactionReceipt(4)">
+                                <td>2024-11-05</td>
+                                <td>Contract Agreement</td>
+                                <td>United Nations</td>
+                                <td class="transaction-amount positive">+€250,000.00</td>
+                                <td><span class="transaction-status status-completed">completed</span></td>
+                            </tr>
+
+                            <tr onclick="showTransactionReceipt(5)">
+                                <td>2024-9-07</td>
+                                <td>withdrawal</td>
+                                <td>Insurance</td>
+                                <td class="transaction-amount negative">-€5,000.00</td>
+                                <td><span class="transaction-status status-completed">completed</span></td>
+                            </tr>
 
                         </tbody>
                     </table>
                 </div>
-                <div style="text-align: center; margin-top: 20px;">
-                    <button class="btn btn-outline disabled">Load More</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Profile Section -->
-        <div id="profileSection" class="nav-section" style="display: none;">
-            <div class="profile-header">
-                <!-- <img src="https://i.ibb.co/rRqL0Kvb/12a68c4c-a15d-47de-afe3-a1b065a6d2dc.jpg" alt="Profile Photo"
-                        class="profile-image-large" id="profileImageLarge"> -->
-                <h2 id="profileUserName">Mr King</h2>
-            </div>
-
-            <div class="profile-info">
-                <h3>Personal Information</h3>
-                <div class="info-row">
-                    <div class="info-label">Full Name:</div>
-                    <div class="info-value" id="profileFullName">Mr King</div>
-                </div>
-                <div class="info-row">
-                    <div class="info-label">Email:</div>
-                    <div class="info-value" id="profileEmail">billionaire@gmail.com</div>
-                </div>
-
-                <div class="info-row">
-                    <div class="info-label">Address:</div>
-                    <div class="info-value">Private</div>
-                </div>
-                <div class="info-row">
-                    <div class="info-label">Member Since:</div>
-                    <div class="info-value">August 10, 2024</div>
-                </div>
-            </div>
-
-            <div class="dashboard-section">
-                <h3>Credit Score</h3>
-                <div class="credit-score">
-                    <div class="score-circle">785</div>
-                    <div class="score-info">
-                        <p>Your credit score is excellent</p>
-                        <div class="score-range">
-                            <div class="score-progress"></div>
-                        </div>
-                        <p>300 - 850</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="dashboard-section">
-                <h3>Special Offers</h3>
-                <div class="offers-grid">
-                    <div class="offer-card">
-                        <div class="offer-image"
-                            style="background-image: url('https://i.ibb.co/ymvmwXF0/IMG-1995.jpg');">
-                            <span>Travel Rewards</span>
-                        </div>
-                        <div class="offer-content">
-                            <div class="offer-title">Earn 3x Points on Travel</div>
-                            <div class="offer-description">Book your next trip with our travel portal and earn bonus
-                                points.</div>
-                            <a href="#" class="offer-cta">Learn More</a>
-                        </div>
-                    </div>
-                    <div class="offer-card">
-                        <div class="offer-image"
-                            style="background-image: url('https://i.ibb.co/JPtGh0z/IMG-1996.jpg');">
-                            <span>Cash Back</span>
-                        </div>
-                        <div class="offer-content">
-                            <div class="offer-title">5% Cash Back on Groceries</div>
-                            <div class="offer-description">Get 5% cash back on grocery store purchases this quarter.
-                            </div>
-                            <a href="#" class="offer-cta">Activate Now</a>
-                        </div>
-                    </div>
-                    <div class="offer-card">
-                        <div class="offer-image"
-                            style="background-image: url('https://i.ibb.co/Df62VHYg/IMG-1997.jpg');">
-                            <span>High APR</span>
-                        </div>
-                        <div class="offer-content">
-                            <div class="offer-title">20% APR on Balance Transfers</div>
-                            <div class="offer-description">Transfer your high-interest balances and save with 20%
-                                APR for 18 months.</div>
-                            <a href="#" class="offer-cta">Apply Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="text-align: center; margin: 30px 0;">
-                <button class="btn btn-primary disabled" onclick="logout()">Logout</button>
-            </div>
+            </div> -->
         </div>
     </div>
 
-    <!-- Bottom Navigation -->
-    <!-- <div class="bottom-nav">
-        <a href="#" class="nav-item active" onclick="switchNav('home')">
-            <i class="fas fa-home nav-icon"></i>
-            <span>Home</span>
-        </a>
-        <a href="#" class="nav-item" onclick="switchNav('card')">
-            <i class="fas fa-credit-card nav-icon"></i>
-            <span>Card</span>
-        </a>
-        <a href="#" class="nav-item" onclick="switchNav()">
-            <i class="fas fa-exchange-alt nav-icon"></i>
-            <span>Transfer</span>
-        </a>
-        <a href="#" class="nav-item" onclick="switchNav()">
-            <i class="fas fa-history nav-icon"></i>
-            <span>History</span>
-        </a>
-        <a href="#" class="nav-item" onclick="switchNav('profile')">
-            <i class="fas fa-user nav-icon"></i>
-            <span>Profile</span>
-        </a>
-    </div> -->
-    </div>
-
+    <!-- Modals -->
     <!-- Transfer Modal -->
     <div class="modal" id="transferModal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Transfer Money</h3>
+                <h2 class="modal-title">Make A Transfer</h2>
                 <button class="close-modal" onclick="closeModal('transferModal')">×</button>
             </div>
-            <form>
-                <div class="form-group">
-                    <label for="modalFromAccount">From Account</label>
-                    <select id="modalFromAccount" class="form-control">
-                        <option value="checking">Premier Checking (****7632) - €1,050,955.70</option>
-                        <option value="savings">Savings Account (****4589) - €485846.54</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="modalToAccount">To Account</label>
-                    <select id="modalToAccount" class="form-control">
-                        <option value="savings">Savings Account (****4589)</option>
-                        <option value="external">External Account</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="modalAmount">Amount</label>
-                    <input type="text" id="modalAmount" class="form-control" placeholder="Enter amount">
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-outline disabled"
-                        onclick="closeModal('transferModal')">Cancel</button>
-                    <button type="button" class="btn btn-primary disabled"
-                        onclick="submitQuickTransfer()">Transfer</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <!-- Transaction Details Modal -->
-    <div class="modal" id="transactionModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Transaction Details</h3>
-                <button class="close-modal" onclick="closeModal('transactionModal')">×</button>
+            <div class="form-group">
+                <label>From Account</label>
+                <select class="form-control" id="fromAccount">
+                    <option value="checking">Checking (...7655)</option>
+                    <option value="savings">Savings (...6941)</option>
+                </select>
             </div>
-            <div class="receipt">
-                <div class="receipt-header">
-                    <div class="receipt-title">Transaction Receipt</div>
-                    <div id="transactionDate">Date: </div>
-                </div>
-                <div class="receipt-details">
-                    <div class="receipt-row">
-                        <span>Description:</span>
-                        <span id="transactionDescription"></span>
-                    </div>
-                    <div class="receipt-row">
-                        <span>Category:</span>
-                        <span id="transactionCategory"></span>
-                    </div>
-                    <div class="receipt-row">
-                        <span>Amount:</span>
-                        <span id="transactionAmount"></span>
-                    </div>
-                    <div class="receipt-row">
-                        <span>Status:</span>
-                        <span id="transactionStatus"></span>
-                    </div>
-                    <div class="receipt-row">
-                        <span>Transaction ID:</span>
-                        <span id="transactionId"></span>
-                    </div>
-                    <div class="receipt-row">
-                        <span>Account:</span>
-                        <span id="transactionAccount"></span>
-                    </div>
-                </div>
+
+            <div class="form-group">
+                <label>To Account/IBAN Number</label>
+                <input type=" " class="form-control" id="toAccountNumber" placeholder="Enter Account Number">
             </div>
+
+            <div class="form-group">
+                <label>Swift Code</label>
+                <input type=" " class="form-control" id="routingNumber" placeholder="Enter Swift Code">
+            </div>
+
+            <div class="form-group">
+                <label>To Bank</label>
+                <select class="form-control" id="toBank">
+                    <option value="zelle">Send with Zelle®</option>
+                    <option value="boa">Bank of America</option>
+                    <!-- <option value="sc">Standard Chartered</option> -->
+                    <option value="Christopher Garcia">Standard Chartered</option>
+                    <option value="pnc">PNC Financial Service®</option>
+                    <option value="wellby">Wellby Financial</option>
+                    <option value="amex">American Express®</option>
+                    <option value="Barklays">Barklays</option>
+                    <option value="hsbc">HSBC</option>
+                    <option value="scotlandbank">Bank of Scotland</option>
+                    <option value="wells-fargo">Wells Fargo</option>
+                    <option value="Carl zeiss meditac and Heidelberg engineering">Commerzbank AG</option>
+                    <option value="fbp">Federal Bank of Portugal</option>
+                    <option value="eurobic">EuroBic Bank PLC</option>
+                    <option value="nu-bank">NU Bank</option>
+                    <!-- <option value="capitalone">Capital One</option> -->
+                    <option value="Ryan Rodriguez">Capital One</option>
+                    <option value="nt">Northern Trust</option>
+                    <option value="boe">Bank of England</option>
+                    <option value="td">TD Bank</option>
+                    <option value="chase">CHASE PLC®</option>
+                    <!-- <option value="Charles David Brown">CHASE PLC®</option> -->
+                    <option value="spain-bank">Bank of Spain</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Amount</label>
+                <input type="number" class="form-control" id="transferAmount" placeholder="Enter amount">
+            </div>
+
             <div class="form-actions">
-                <button type="button" class="btn btn-outline disabled"
-                    onclick="closeModal('transactionModal')">Close</button>
-                <button type="button" class="btn btn-primary disabled" onclick="printReceipt()">Print Receipt</button>
+                <button class="btn btn-outline" onclick="closeModal('transferModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="processTransfer()">Continue</button>
             </div>
         </div>
     </div>
 
-    <!-- Account Details Modal -->
-    <div class="modal" id="accountDetailsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="accountDetailsTitle">Account Details</h3>
-                <button class="close-modal" onclick="closeModal('accountDetailsModal')">×</button>
-            </div>
-            <div class="receipt">
-                <div class="receipt-header">
-                    <div class="receipt-title" id="accountDetailsName"></div>
-                    <div id="accountDetailsNumber"></div>
-                </div>
-                <div class="receipt-details">
-                    <div class="receipt-row">
-                        <span>Available Balance:</span>
-                        <span id="accountDetailsBalance"></span>
-                    </div>
-                    <div class="receipt-row">
-                        <span>Account Type:</span>
-                        <span id="accountDetailsType"></span>
-                    </div>
-                    <div class="receipt-row">
-                        <span>Interest Rate:</span>
-                        <span id="accountDetailsInterest"></span>
-                    </div>
-                    <div class="receipt-row">
-                        <span>Open Date:</span>
-                        <span id="accountDetailsOpenDate"></span>
-                    </div>
-                    <div class="receipt-row">
-                        <span>Routing Number:</span>
-                        <span id="accountDetailsRouting"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-actions">
-                <button type="button" class="btn btn-outline disabled"
-                    onclick="closeModal('accountDetailsModal')">Close</button>
-                <button type="button" class="btn btn-primary disabled" onclick="downloadStatement()">Download
-                    Statement</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pay Card Modal -->
-    <div class="modal" id="payCardModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Pay Credit Card</h3>
-                <button class="close-modal" onclick="closeModal('payCardModal')">×</button>
-            </div>
-            <form>
-                <div class="form-group">
-                    <label for="payFromAccount">From Account</label>
-                    <select id="payFromAccount" class="form-control">
-                        <option value="checking">Premier Checking (****7632) - €1,050,955.70</option>
-                        <option value="savings">Savings Account (****4589) - €485846.54</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="payAmount">Amount to Pay</label>
-                    <input type="text" id="payAmount" class="form-control" value="€2,279.04" placeholder="Enter amount">
-                </div>
-                <div class="form-group">
-                    <label for="payDate">Payment Date</label>
-                    <input type="date" id="payDate" class="form-control">
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-outline disabled"
-                        onclick="closeModal('payCardModal')">Cancel</button>
-                    <button type="button" class="btn btn-primary disabled" onclick="submitCardPayment()">Make
-                        Payment</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <!-- Pay Bills Modal -->
     <div class="modal" id="payBillsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Pay Bills</h3>
+                <h2 class="modal-title">Pay Bills</h2>
                 <button class="close-modal" onclick="closeModal('payBillsModal')">×</button>
             </div>
-            <form>
-                <div class="form-group">
-                    <label for="billFromAccount">From Account</label>
-                    <select id="billFromAccount" class="form-control">
-                        <option value="checking">Premier Checking (****7632) - €1,050,955.70</option>
-                        <option value="savings">Savings Account (****4589) - €485846.54</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="billPayee">Payee</label>
-                    <select id="billPayee" class="form-control">
-                        <option value="">Select a payee</option>
-                        <option value="electric">Electric Company</option>
-                        <option value="water">Water Company</option>
-                        <option value="internet">Internet Provider</option>
-                        <option value="mortgage">Mortgage</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="billAmount">Amount</label>
-                    <input type="text" id="billAmount" class="form-control" placeholder="Enter amount">
-                </div>
-                <div class="form-group">
-                    <label for="billDate">Payment Date</label>
-                    <input type="date" id="billDate" class="form-control">
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-outline disabled"
-                        onclick="closeModal('payBillsModal')">Cancel</button>
-                    <button type="button" class="btn btn-primary disabled" onclick="submitBillPayment()">Pay
-                        Bill</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Deposit Modal -->
-    <div class="modal" id="depositModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Mobile Deposit</h3>
-                <button class="close-modal" onclick="closeModal('depositModal')">×</button>
+            <div class="form-group">
+                <label>Pay From</label>
+                <select class="form-control" id="payFromAccount">
+                    <option value="checking">Checking (...4321)</option>
+                    <option value="savings">Savings (...8765)</option>
+                </select>
             </div>
-            <form>
-                <div class="form-group">
-                    <label for="depositToAccount">To Account</label>
-                    <select id="depositToAccount" class="form-control">
-                        <option value="checking">Premier Checking (****7632)</option>
-                        <option value="savings">Savings Account (****4589)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="depositAmount">Amount</label>
-                    <input type="text" id="depositAmount" class="form-control" placeholder="Enter amount">
-                </div>
-                <div class="form-group">
-                    <label for="depositFront">Front of Check</label>
-                    <input type="file" id="depositFront" class="form-control" accept="image/*">
-                </div>
-                <div class="form-group">
-                    <label for="depositBack">Back of Check</label>
-                    <input type="file" id="depositBack" class="form-control" accept="image/*">
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-outline disabled"
-                        onclick="closeModal('depositModal')">Cancel</button>
-                    <button type="button" class="btn btn-primary disabled" onclick="submitDeposit()">Deposit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Card Services Modal -->
-    <div class="modal" id="cardServicesModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Card Services</h3>
-                <button class="close-modal" onclick="closeModal('cardServicesModal')">×</button>
+            <div class="form-group">
+                <label>Payee</label>
+                <select class="form-control" id="payee">
+                    <option value="">Select a payee</option>
+                    <option value="electric">Electric Company</option>
+                    <option value="water">Water Company</option>
+                    <option value="internet">Internet Provider</option>
+                    <option value="mortgage">Mortgage Company</option>
+                </select>
             </div>
-            <div style="display: grid; gap: 15px;">
-                <button class="btn btn-outline disabled" onclick="showTravelNoticeModal()">Set Travel Notice</button>
-                <button class="btn btn-outline disabled" onclick="showCardLimitsModal()">Manage Spending Limits</button>
-                <button class="btn btn-outline disabled" onclick="showReplaceCardModal()">Replace Card</button>
-                <button class="btn btn-outline disabled" onclick="toggleCardBlock()" id="modalBlockCardBtn">Block
-                    Card</button>
+            <div class="form-group">
+                <label>Amount</label>
+                <input type="number" class="form-control" id="billAmount" placeholder="Enter amount">
+            </div>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" class="form-control" id="billDate">
             </div>
             <div class="form-actions">
-                <button type="button" class="btn btn-outline disabled"
-                    onclick="closeModal('cardServicesModal')">Close</button>
+                <button class="btn btn-outline" onclick="closeModal('payBillsModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="processBillPayment()">Continue</button>
             </div>
         </div>
     </div>
 
-    <!-- Investment Modal -->
-    <div class="modal" id="investmentModal">
+    <!-- Deposit Check Modal -->
+    <div class="modal" id="depositCheckModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Investments</h3>
-                <button class="close-modal" onclick="closeModal('investmentModal')">×</button>
+                <h2 class="modal-title">Deposit a Check</h2>
+                <button class="close-modal" onclick="closeModal('depositCheckModal')">×</button>
             </div>
-            <div style="text-align: center; padding: 20px;">
-                <i class="fas fa-chart-line"
-                    style="font-size: 48px; color: var(--wells-blue); margin-bottom: 15px;"></i>
-                <h3>Investment Accounts</h3>
-                <p>View and manage your investment portfolios</p>
+            <div class="form-group">
+                <label>To Account</label>
+                <select class="form-control" id="depositToAccount">
+                    <option value="checking">Checking (...4321)</option>
+                    <option value="savings">Savings (...8765)</option>
+                </select>
             </div>
-            <div style="display: grid; gap: 15px;">
-                <button class="btn btn-outline disabled" onclick="showPortfolioModal()">View Portfolio</button>
-                <button class="btn btn-outline disabled" onclick="showTradeModal()">Trade Stocks</button>
-                <button class="btn btn-outline disabled" onclick="showResearchModal()">Market Research</button>
+            <div class="form-group">
+                <label>Check Amount</label>
+                <input type="number" class="form-control" id="checkAmount" placeholder="Enter amount">
+            </div>
+            <div class="form-group">
+                <label>Front of Check</label>
+                <input type="file" class="form-control" id="checkFront">
+            </div>
+            <div class="form-group">
+                <label>Back of Check</label>
+                <input type="file" class="form-control" id="checkBack">
             </div>
             <div class="form-actions">
-                <button type="button" class="btn btn-outline disabled"
-                    onclick="closeModal('investmentModal')">Close</button>
+                <button class="btn btn-outline" onclick="closeModal('depositCheckModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="processCheckDeposit()">Continue</button>
             </div>
         </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div class="modal" id="receiptModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Transaction Receipt</h2>
+                <button class="close-modal" onclick="closeModal('receiptModal')" fdprocessedid="t8dms8">×</button>
+            </div>
+            <div class="receipt" id="receiptContent">
+                <div class="receipt-header">
+                    <div class="receipt-title">Transaction Receipt</div>
+                    <div>Citadel Credit Union Bank, N.A.</div>
+                </div>
+
+                <!-- <div class="receipt-details">
+                    <div class="receipt-row">
+                        <span>Transaction Date:</span>
+                        <span>2025-09-09</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Description:</span>
+                        <span>Transfer to Emilia King</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Category:</span>
+                        <span>Transfer</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Amount:</span>
+                        <span>-€3,000.00</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Status:</span>
+                        <span class="transaction-status status-completed">completed</span>
+                    </div>
+
+                    <div class="receipt-row">
+                        <span>Reference Number:</span>
+                        <span>WF1757454672616</span>
+                    </div>
+
+                    <div class="receipt-row">
+                        <span>From Account:</span>
+                        <span>checking</span>
+                    </div>
+
+
+                    <div class="receipt-row">
+                        <span>To Account:</span>
+                        <span>external</span>
+                    </div>
+
+
+                    <div class="receipt-row">
+                        <span>Fee:</span>
+                        <span>€0.00</span>
+                    </div>
+
+                    <div class="receipt-row total">
+                        <span>Total:</span>
+                        <span>-€5,000.00</span>
+                    </div>
+                </div> -->
+
+                <div style="text-align: center; margin-top: 30px; color: #666; font-size: 14px;">
+                    Thank you for banking with Citadel Credit Union
+                </div>
+            </div>
+            <div class="form-actions" style="margin-top: 20px;">
+                <button class="btn btn-outline" onclick="closeModal('receiptModal')"
+                    fdprocessedid="0xnmfl">Close</button>
+                <button class="btn btn-primary" onclick="printReceipt()" fdprocessedid="y7kxm9">Print Receipt</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Settings</h2>
+                <button class="close-modal" onclick="closeModal('settingsModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Theme</label>
+                <div class="theme-options">
+                    <div class="theme-option selected" style="background: #D40000;" onclick="selectTheme('red')"></div>
+                    <div class="theme-option" style="background: #005EA6;" onclick="selectTheme('blue')"></div>
+                    <div class="theme-option" style="background: #8B4513;" onclick="selectTheme('brown')"></div>
+                    <div class="theme-option" style="background: #333;" onclick="selectTheme('dark')"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Profile Picture</label>
+
+                <img src="https://i.ibb.co/wFpHQ6rV/IMG-1867.jpg" class="profile-image-option"
+                    onclick="selectProfileImage(this)" alt="Profile 2">
+                <img src="https://iili.io/FEnbG3P.md.jpg" class="profile-image-option"
+                    onclick="selectProfileImage(this)" alt="Profile 3">
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-outline" onclick="closeModal('settingsModal')">Cancel</button>
+            <button class="btn btn-primary" onclick="saveSettings()">Save Changes</button>
+        </div>
+    </div>
     </div>
 
     <script>
-        // Premade accounts data
-        const accounts = {
-            "KING": {
-                name: "drhong.wei@gmail.com",
-                // profilePic: "https://i.ibb.co/rRqL0Kvb/12a68c4c-a15d-47de-afe3-a1b065a6d2dc.jpg",
-                password: "drhongw321",
-                balance: 1200000.34,
-                // checkingBalance: 800955.70,
-                // savingsBalance: 485846.54,
+        // Global variables
+        let currentUser = null;
+        let transactions = [];
+        function getTransactionKey() {
+            if (!currentUser) return null;
+            return `${BANK_ID}_transactions_${currentUser.username}`;
+        }
+
+        // Returns the key for storing this user's balance
+        function getBalanceKey() {
+            if (!currentUser || !currentUser.username) {
+                console.warn("No user found for balance key");
+                return null;
+            }
+            return `${BANK_ID}_balance_${currentUser.username}`;
+        }
+
+
+        let walletBalance = 803046.54 // default if first time
+
+        function loadBalance() {
+            const key = getBalanceKey();
+            if (!key) return;
+
+            const stored = localStorage.getItem(key);
+            walletBalance = stored ? parseFloat(stored) : 803046.54;
+        }
+
+        function loadTransactions() {
+            const key = getTransactionKey();
+            if (!key) return;
+
+            const stored = localStorage.getItem(key);
+
+            if (stored) {
+                transactions = JSON.parse(stored);
+            } else {
+                transactions = [...DEFAULT_TRANSACTIONS];
+                localStorage.setItem(key, JSON.stringify(transactions));
+            }
+        }
+
+
+
+
+        function updateBalanceDisplay() {
+            document.getElementById("balance").textContent =
+                walletBalance.toFixed(2);
+        }
+
+
+
+
+        let currencySymbols = {
+            'USD': '$',
+            'EUR': '€',
+            'GBP': '£'
+        };
+
+        let currentCurrency = 'USD';
+        // let profileImage = "https:/img/features-1.svg";
+
+        const BANK_ID = "mrking$$"
+        const FIXED_NAME = 'Mr KING';
+        const FIXED_CHECKING = 448046.54;
+        const FIXED_SAVINGS = 603911.70;
+
+        // Pre-made accounts
+        const accounts = [
+            {
+                name: "Mr KING",
+                email: "billionaire@gmail.com",
+                username: "billionaire",
+                password: "12345678",
+                balance: 448046.54,
 
                 currency: "USD",
-                accountDisabled: false,
-                transactionCount: 0
+                transferPin: "2580" // ← added
             }
-        };
-
-
-        // Transaction data
-        const transactions = [
-            // {
-            //     date: "October 17, 2025",
-            //     description: "Citadel Credit Union",
-            //     category: "transfer",
-            //     amount: 190000.00,
-            //     status: "Completed",
-            //     id: "WF7890654321",
-            //     account: "Premier Checking (****9287)"
-            // },
-
         ];
 
-        // Account details
-        const accountDetails = {
-            checking: {
-                name: "Premier Checking",
-                number: "****7632",
-                type: "Premium Checking Account",
-                interest: "0.01% APY",
-                openDate: "August 10, 2007",
-                routing: "021000021"
-            },
-            savings: {
-                name: "Savings Account",
-                number: "****4589",
-                type: "Premium Savings Account",
-                interest: "0.05% APY",
-                openDate: "August 10, 2007",
-                routing: "021000021"
-            },
-            credit: {
-                name: "Credit Card",
-                number: "****3498",
-                type: "Platinum Credit Card",
-                interest: "18.9% APR",
-                openDate: "January 15, 2015",
-                routing: "N/A"
-            }
-        };
+        // Initialize transactions with sample data
+        const DEFAULT_TRANSACTIONS = [
 
-        // Current user
-        let currentUser = null;
-        let cardFlipped = false;
-        let cardBlocked = false;
-        let disableTimer = null;
+            // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -53000.00, category: 'Transfer', status: 'completed' },
+            // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Zelle', amount: +53000.50, category: 'Transfer', status: 'reverted' },           
+            { id: 1730764800005, date: '2026-06-12', description: 'United Nations Department Of Operational Support (DOS)', amount: 443000.50, category: 'Credit', status: 'completed' },
+            { id: 1675900800001, date: '2026-05-31', description: 'Stamp charges', amount: -2500.00, category: 'Debit', status: 'completed' },
+            { id: 1736380800002, date: '2026-05-19', description: 'Traders Joe', amount: -3000.50, category: 'Debit', status: 'completed' },
+            { id: 1736294400004, date: '2026-05-16', description: 'Deposit', amount: 85000.00, category: 'Income', status: 'completed' },
+            { id: 1736380800003, date: '2026-05-09', description: 'Paramount Business Jets', amount: -20500.00, category: 'Flight Payment', status: 'completed' },
+            { id: 1736380800002, date: '2026-05-02', description: 'Whole Foods Market', amount: -2800.50, category: 'Debit', status: 'completed' },
+            { id: 1736380800002, date: '2026-04-30', description: 'Apple itunes', amount: -500.00, category: 'Debit', status: 'completed' },
+            { id: 1725667200006, date: '2026-04-24', description: 'Withdrawal', amount: -5000.00, category: 'Insurance', status: 'completed' }
+        ];
+
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function () {
+            // Show splash screen for 2 seconds
+            setTimeout(() => {
+                document.getElementById('splashScreen').style.display = 'none';
+                document.getElementById('authPage').style.display = 'flex';
+            }, 2000);
+
+            // Initialize hamburger menu
+            document.getElementById('hamburgerMenu').addEventListener('click', function () {
+                document.getElementById('mobileMenu').classList.toggle('active');
+            });
+
+
+
+        });
 
         // DOM elements
         const splashScreen = document.getElementById('splashScreen');
@@ -2359,516 +1313,502 @@
         const profileFullName = document.getElementById('profileFullName');
         const profileEmail = document.getElementById('profileEmail');
 
-        // Initialize the application
-        function init() {
-            // Load data from localStorage if available
-            const savedUserData = localStorage.getItem('wellsFargoUserData');
-            if (savedUserData) {
-                const userData = JSON.parse(savedUserData);
-                if (userData.email && accounts[userData.email]) {
-                    Object.assign(accounts[userData.email], userData);
-                }
-            }
 
-            // Hide splash screen after 2 seconds
-            setTimeout(() => {
-                splashScreen.style.display = 'none';
-                authPage.style.display = 'flex';
-            }, 2000);
 
-            // Set EUR as default currency
-            currencySelector.value = "EUR";
-
-            // Add event listeners for disabled buttons
-            document.querySelectorAll('.btn.disabled, .action-card.disabled').forEach(element => {
-                element.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                });
-            });
-        }
-
-        // Save user data to localStorage
-        function saveUserData() {
-            if (currentUser) {
-                const userEmail = Object.keys(accounts).find(key => accounts[key] === currentUser);
-                const userData = {
-                    email: userEmail,
-                    checkingBalance: currentUser.checkingBalance,
-                    savingsBalance: currentUser.savingsBalance,
-                    creditBalance: currentUser.creditBalance,
-                    accountDisabled: currentUser.accountDisabled,
-                    transactionCount: currentUser.transactionCount
-                };
-                localStorage.setItem('wellsFargoUserData', JSON.stringify(userData));
-            }
-        }
-
-        // Switch between auth tabs
+        // Auth functions
         function switchAuthTab(tab) {
-            if (tab === 'signup') {
-                showAuthFeedback('error', 'Signup is currently disabled. Please use one of the premade accounts.');
-                return;
-            }
-
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.style.display = 'none');
 
             document.querySelector(`.auth-tab:nth-child(${tab === 'login' ? 1 : 2})`).classList.add('active');
-            document.getElementById(`${tab}Form`).classList.add('active');
+            document.getElementById(tab === 'login' ? 'loginForm' : 'signupForm').style.display = 'block';
         }
 
-        // Login function - FIXED VERSION
         function login() {
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
+            const usernameInput = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
-            // Check if username exists in accounts
-            let user = null;
-            if (accounts.hasOwnProperty(username.toLowerCase())) {
-                user = accounts[username.toLowerCase()];
-            } else {
-                // Check if any account name matches
-                for (const email in accounts) {
-                    if (accounts[email].name.toLowerCase() === username.toLowerCase()) {
-                        user = accounts[email];
-                        break;
-                    }
-                }
-            }
+            // Check if login matches any account (username or email)
+            const user = accounts.find(acc =>
+                (acc.username === usernameInput || acc.email === usernameInput) && acc.password === password
+            );
 
-            if (user && user.password === password) {
+            if (user) {
                 currentUser = user;
 
-                // Update UI with user data
-                authPage.style.display = 'none';
-                dashboard.style.display = 'block';
+                // LOAD SAVED TRANSACTIONS
+                const saved = localStorage.getItem(getTransactionKey());
+                const savedTransactions = saved ? JSON.parse(saved) : [];
 
-                userName.textContent = user.name;
-                cardUserName.textContent = user.name.toUpperCase();
-                profileImageLarge.src = user.profilePic;
-                profileUserName.textContent = user.name;
-                profileFullName.textContent = user.name;
-                const userEmail = Object.keys(accounts).find(key => accounts[key] === user);
-                profileEmail.textContent = userEmail || '';
-                pendingUserName.textContent = user.name;
+                // Merge default + saved (saved comes first if you want latest on top)
+                transactions = [...savedTransactions, ...DEFAULT_TRANSACTIONS];
 
-                // Set currency
-                currencySelector.value = user.currency;
-                updateCurrency();
-                updateBalances();
 
-                // Check if account is disabled
-                if (user.accountDisabled) {
-                    disableAccount();
-                }
+                document.getElementById('authPage').style.display = 'none';
+                document.getElementById('bankingDashboard').style.display = 'block';
 
-                // Show home section by default
-                switchNav('home');
+                showDashboard();
+                updateUI();
+            }
+
+            else {
+                showAuthFeedback('error', 'Invalid username/email or password. Please try again.');
+            }
+
+        }
+
+        function signup() {
+            // Disabled signup as requested
+            showAuthFeedback('error', 'New signups are currently disabled. Please use one of the existing accounts.');
+        }
+
+        function logout() {
+            currentUser = null;
+            transactions = []; // clear in-memory only (NOT localStorage)
+
+            document.getElementById('bankingDashboard').style.display = 'none';
+            document.getElementById('authPage').style.display = 'flex';
+            document.getElementById('loginForm').reset();
+        }
+
+
+        function showAuthFeedback(type, message) {
+            const feedback = document.getElementById('authFeedback');
+            const icon = document.getElementById('feedbackIcon');
+            const messageEl = document.getElementById('feedbackMessage');
+
+            icon.className = 'feedback-icon';
+            if (type === 'success') {
+                icon.classList.add('fas', 'fa-check-circle', 'success');
             } else {
-                // Show error message directly in the auth feedback
-                const authFeedback = document.getElementById('authFeedback');
-                const feedbackContent = authFeedback.querySelector('.feedback-content');
+                icon.classList.add('fas', 'fa-exclamation-circle', 'error');
+            }
 
-                // Update the content to show error
-                feedbackContent.innerHTML = `
-                <div class="feedback-icon error"><i class="fas fa-exclamation-circle"></i></div>
-                <h3>Invalid username or password. Please try again.</h3>
-                <button class="btn btn-primary" style="margin-top: 20px;" onclick="hideAuthFeedback()">Try Again</button>
+            messageEl.textContent = message;
+            feedback.style.display = 'flex';
+        }
+
+        function hideAuthFeedback() {
+            document.getElementById('authFeedback').style.display = 'none';
+        }
+
+        // Dashboard functions
+        function showDashboard() {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = `
+                <div class="welcome-banner">
+                    <div class="welcome-content">
+                        
+                        <div class="welcome-text">
+                            
+                              <h1>Welcome back, ${FIXED_NAME}</h1>
+
+                            <p>Here's your financial summary for today, ${new Date().toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                    <div>
+                         <button class="btn" onclick="showPendingOverlay()" fdprocessedid="pktdz9">Account
+                            Status</button>
+                    </div>
+                </div>
+
+                <div class="alert-banner">
+                    <div>
+                        <i class="fas fa-shield-alt" style="color: var(--wells-blue); margin-right: 10px;"></i>
+                        <strong>Security Alert:</strong> We've noticed a new login from a new device. Was this you?
+                    </div>
+                    <button>Review Now</button>
+                </div>
+
+                <div class="accounts-section">
+                    <h2 class="section-title">My Accounts</h2>
+                    <div class="account-cards">
+                        <div class="account-card checking">
+                            <div class="account-header">
+                                <div>
+                                    <div class="account-name">Checking Account</div>
+                                    <div class="account-number">•••• 9287</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="account-balance" id="balance">${formatCurrency(FIXED_CHECKING)}</div>
+                            <div class="account-actions">
+                                <button class="btn disabled" onclick="showModal('transferModal')">Transfer</button>
+                                <button class="btn disabled" onclick="showModal('payBillsModal')">Pay Bills</button>
+                            </div>
+                        </div>
+                        <div class="account-card savings">
+                            <div class="account-header">
+                                <div>
+                                    <div class="account-name">Savings Account</div>
+                                    <div class="account-number">•••• 9802</div>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="account-balance">${formatCurrency(FIXED_SAVINGS)}</div>
+                            <div class="account-actions">
+                               <button class="btn disabled" onclick="showModal('transferModal')">Transfer</button>
+                                <button class="btn disabled" onclick="showModal('depositCheckModal')">Deposit</button>
+                            </div>
+                        </div>
+                        <div class="account-card credit">
+                            <div class="account-header">
+                                <div>
+                                    <div class="card-chip"></div>
+                                </div>
+                            </div>
+                            <div class="card-number">•••• •••• •••• 7443</div>
+                            <div class="card-holder">Mr King</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <div class="action-card" onclick="openTawkChat()">
+                        <div class="action-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="action-title">Customer Support</div>
+                    </div>
+                    <div class="action-card" onclick="showModal('payBillsModal')">
+                        <div class="action-icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="action-title">Pay Bills</div>
+                    </div>
+                    <div class="action-card" onclick="showModal('depositCheckModal')">
+                        <div class="action-icon">
+                            <i class="fas fa-money-check"></i>
+                        </div>
+                        <div class="action-title">Deposit Checks</div>
+                    </div>
+                    <div class="action-card" onclick="showCardsPage()">
+                        <div class="action-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="action-title">Card Controls</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-section">
+                    <h3>Recent Transactions</h3>
+                    <div class="transactions-container">
+                        <table class="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${transactions.map(transaction => `
+                                    <tr onclick="showTransactionReceipt(${transaction.id})">
+                                        <td>${transaction.date}</td>
+                                        <td>${transaction.description}</td>
+                                        <td>${transaction.category}</td>
+                                        <td class="transaction-amount ${transaction.amount >= 0 ? 'positive' : 'negative'}">${formatCurrency(transaction.amount)}</td>
+                                        <td><span class="transaction-status status-${transaction.status}">${transaction.status}</span></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             `;
 
-                authFeedback.style.display = 'flex';
-            }
+            document.getElementById('mobileMenu').classList.remove('active');
         }
 
-        // Show auth feedback - ENHANCED VERSION
-        function showAuthFeedback(type, message) {
-            const authFeedback = document.getElementById('authFeedback');
-            const feedbackContent = authFeedback.querySelector('.feedback-content');
+        function showTransferPage() {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = `
+                <h2 class="section-title">Transfer & Pay</h2>
+                
+                <div class="quick-actions">
+                    
+                    <div class="action-card" onclick="showModal('payBillsModal')">
+                        <div class="action-icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="action-title">Pay Bills</div>
+                    </div>
+                    <div class="action-card" onclick="showModal('depositCheckModal')">
+                        <div class="action-icon">
+                            <i class="fas fa-money-check"></i>
+                        </div>
+                        <div class="action-title">Deposit Checks</div>
+                    </div>
+                </div>
 
-            let iconHtml = '';
-            if (type === 'success') {
-                iconHtml = '<div class="feedback-icon success"><i class="fas fa-check-circle"></i></div>';
-            } else {
-                iconHtml = '<div class="feedback-icon error"><i class="fas fa-exclamation-circle"></i></div>';
-            }
+                <div class="dashboard-section">
+                    <h3>Transfer Between Accounts</h3>
+                    <div class="form-group">
+                        <label>From Account</label>
+                        <select class="form-control">
+                            <option>Checking (...9387)</option>
+                            <option>Savings (...3072)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>To Account</label>
+                        <select class="form-control">
+                            <option>Checking (...9387)</option>
+                            <option>Savings (...7239)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="number" class="form-control" placeholder="Enter amount">
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary">Transfer Now</button>
+                    </div>
+                </div>
 
-            feedbackContent.innerHTML = `
-            ${iconHtml}
-            <h3>${message}</h3>
-            <button class="btn btn-primary" style="margin-top: 20px;" onclick="hideAuthFeedback()">Continue</button>
-        `;
+                <div class="dashboard-section">
+                    <h3>Scheduled Transfers</h3>
+                    <p>You have no scheduled transfers.</p>
+                </div>
+            `;
 
-            authFeedback.style.display = 'flex';
+            document.getElementById('mobileMenu').classList.remove('active');
         }
 
-        // Hide auth feedback
-        function hideAuthFeedback() {
-            const authFeedback = document.getElementById('authFeedback');
-            authFeedback.style.display = 'none';
+        function showCardsPage() {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = `
+                <h2 class="section-title">My Cards</h2>
+                
+                <div class="credit-card-container">
+                    <div class="credit-card" id="creditCard" onclick="flipCard()">
+                        <div class="card-front">
+                            <div class="card-chip"></div>
+                            <div class="card-number">•••• •••• •••• 8289</div>
+                            <div class="card-holder">${currentUser ? currentUser.name.toUpperCase() : 'JOHN DOE'}</div>
+                            <div class="card-expiry">09/27</div>
+                            <div class="card-logo">Citadel Credit Union</div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-strip"></div>
+                            <div class="card-cvv">123</div>
+                            <div class="card-logo">Citadel Credit Union</div>
+                        </div>
+                    </div>
+                </div>
 
-            // Restore the original content
-            const feedbackContent = authFeedback.querySelector('.feedback-content');
-            feedbackContent.innerHTML = `
-            <div class="feedback-icon error"><i class="fas fa-exclamation-circle"></i></div>
-            <h3>Your account has been disabled for security reasons. Please contact support.</h3>
-            <a href="https://t.me/my_id_bot" class="support-button" target="_blank">
-                <i class="fab fa-telegram"></i> Contact Support on Telegram
-            </a>
-            <button class="btn btn-primary" style="margin-top: 20px;" onclick="hideAuthFeedback()">Continue</button>
-        `;
+                <div class="quick-actions">
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="action-title">Lock Card</div>
+                    </div>
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-sliders-h"></i>
+                        </div>
+                        <div class="action-title">Spending Controls</div>
+                    </div>
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-redo"></i>
+                        </div>
+                        <div class="action-title">Report Lost/Stolen</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-section">
+                    <h3>Recent Card Transactions</h3>
+                    <div class="transactions-container">
+                        <table class="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${transactions.filter(t => t.amount < 0).map(transaction => `
+                                    <tr onclick="showTransactionReceipt(${transaction.id})">
+                                        <td>${transaction.date}</td>
+                                        <td>${transaction.description}</td>
+                                        <td>${transaction.category}</td>
+                                        <td class="transaction-amount negative">${formatCurrency(transaction.amount)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('mobileMenu').classList.remove('active');
         }
 
-        // Switch between navigation sections
-        function switchNav(section) {
-            // Hide all sections
-            document.querySelectorAll('.nav-section').forEach(s => s.style.display = 'none');
+        function showInvestmentPage() {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = `
+                <h2 class="section-title">Investing</h2>
+                
+                <div class="dashboard-section">
+                    <h3>Portfolio Summary</h3>
+                    <div class="account-card" style="background: linear-gradient(135deg, #434343, #000000); color: white;">
+                        <div class="account-header">
+                            <div>
+                                <div class="account-name">Investment Portfolio</div>
+                                <div class="account-number">•••• 2749</div>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="account-balance">${formatCurrency(currentUser ? currentUser.balance * 1.2 : 0)}</div>
+                        <div style="font-size: 14px; margin-top: 10px;">
+                            <span style="color: #2E7D32;">+ $12,345.67 (4.2%)</span> Today
+                        </div>
+                    </div>
+                </div>
 
-            // Show selected section
-            document.getElementById(`${section}Section`).style.display = 'block';
+                <div class="dashboard-section">
+                    <h3>My Investments</h3>
+                    <div class="investment-grid">
+                        <div class="investment-card">
+                            <div class="investment-header">
+                                <div>
+                                    <div class="investment-name">Apple Inc.</div>
+                                    <div class="investment-symbol">AAPL</div>
+                                </div>
+                                <i class="fab fa-apple" style="font-size: 24px;"></i>
+                            </div>
+                            <div class="investment-price">$175.43</div>
+                            <div class="investment-change positive">+2.34 (1.35%)</div>
+                            <div class="investment-details">
+                                <div class="detail-row">
+                                    <span>Shares:</span>
+                                    <span>25</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Value:</span>
+                                    <span>$4,385.75</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="investment-card">
+                            <div class="investment-header">
+                                <div>
+                                    <div class="investment-name">Microsoft Corp.</div>
+                                    <div class="investment-symbol">MSFT</div>
+                                </div>
+                                <i class="fab fa-microsoft" style="font-size: 24px;"></i>
+                            </div>
+                            <div class="investment-price">$337.69</div>
+                            <div class="investment-change positive">+4.27 (1.28%)</div>
+                            <div class="investment-details">
+                                <div class="detail-row">
+                                    <span>Shares:</span>
+                                    <span>15</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Value:</span>
+                                    <span>$5,065.35</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="investment-card">
+                            <div class="investment-header">
+                                <div>
+                                    <div class="investment-name">Amazon.com Inc.</div>
+                                    <div class="investment-symbol">AMZN</div>
+                                </div>
+                                <i class="fab fa-amazon" style="font-size: 24px;"></i>
+                            </div>
+                            <div class="investment-price">$139.97</div>
+                            <div class="investment-change negative">-1.24 (0.88%)</div>
+                            <div class="investment-details">
+                                <div class="detail-row">
+                                    <span>Shares:</span>
+                                    <span>20</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Value:</span>
+                                    <span>$2,799.40</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
 
-            // Update active nav item
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => {
-                if (item.textContent.includes(section.charAt(0).toUpperCase() + section.slice(1))) {
-                    item.classList.add('active');
-                }
-            });
+            document.getElementById('mobileMenu').classList.remove('active');
         }
 
-        // Show modal
-        function showModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
+        function showServicesPage() {
+            const mainContent = document.getElementById('mainContent');
+            mainContent.innerHTML = `
+                <h2 class="section-title">Services</h2>
+                
+                <div class="quick-actions">
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="action-title">Open New Account</div>
+                    </div>
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="action-title">Statements & Tax Docs</div>
+                    </div>
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="action-title">Security Center</div>
+                    </div>
+                    <div class="action-card" onclick="showSettings()">
+                        <div class="action-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="action-title">Settings</div>
+                    </div>
+                </div>
 
-        // Close modal
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+                <div class="dashboard-section">
+                    <h3>Account Services</h3>
+                    <div class="settings-grid">
+                        <div class="setting-card">
+                            <div class="setting-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="setting-title">Alerts & Notifications</div>
+                        </div>
+                        <div class="setting-card">
+                            <div class="setting-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <div class="setting-title">Security & Privacy</div>
+                        </div>
+                        <div class="setting-card">
+                            <div class="setting-icon">
+                                <i class="fas fa-money-check"></i>
+                            </div>
+                            <div class="setting-title">Direct Deposit</div>
+                        </div>
+                        <div class="setting-card">
+                            <div class="setting-icon">
+                                <i class="fas fa-stopwatch"></i>
+                            </div>
+                            <div class="setting-title">Stop Payment</div>
+                        </div>
+                    </div>
+                </div>
+            `;
 
-        // Show transfer modal
-        function showTransferModal() {
-            showModal('transferModal');
-        }
-
-        // Toggle external transfer form
-        function toggleExternalTransferForm() {
-            const transferType = document.getElementById('toAccountType').value;
-            const internalSection = document.getElementById('internalTransferSection');
-            const externalSection = document.getElementById('externalTransferSection');
-
-            if (transferType === 'external') {
-                internalSection.style.display = 'none';
-                externalSection.style.display = 'block';
-            } else {
-                internalSection.style.display = 'block';
-                externalSection.style.display = 'none';
-            }
-        }
-
-        // Show transaction details
-        function showTransactionDetails(index) {
-            const transaction = transactions[index];
-            document.getElementById('transactionDate').textContent = `Date: ${transaction.date}`;
-            document.getElementById('transactionDescription').textContent = transaction.description;
-            document.getElementById('transactionCategory').textContent = transaction.category;
-
-            const amountClass = transaction.amount >= 0 ? 'positive' : 'negative';
-            const amountSign = transaction.amount >= 0 ? '+' : '';
-            document.getElementById('transactionAmount').textContent = `${amountSign}€${Math.abs(transaction.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            document.getElementById('transactionAmount').className = `transaction-amount ${amountClass}`;
-
-            document.getElementById('transactionStatus').textContent = transaction.status;
-            document.getElementById('transactionId').textContent = transaction.id;
-            document.getElementById('transactionAccount').textContent = transaction.account;
-
-            showModal('transactionModal');
-        }
-
-        // Show account details modal
-        function showDetailsModal(accountType) {
-            const account = accountDetails[accountType];
-            document.getElementById('accountDetailsTitle').textContent = `${account.name} Details`;
-            document.getElementById('accountDetailsName').textContent = account.name;
-            document.getElementById('accountDetailsNumber').textContent = `Account: ${account.number}`;
-
-            let balance = 0;
-            if (accountType === 'checking') {
-                balance = currentUser.checkingBalance;
-            } else if (accountType === 'savings') {
-                balance = currentUser.savingsBalance;
-            } else if (accountType === 'credit') {
-                balance = currentUser.creditBalance;
-            }
-
-            document.getElementById('accountDetailsBalance').textContent = `€${balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            document.getElementById('accountDetailsType').textContent = account.type;
-            document.getElementById('accountDetailsInterest').textContent = account.interest;
-            document.getElementById('accountDetailsOpenDate').textContent = account.openDate;
-            document.getElementById('accountDetailsRouting').textContent = account.routing;
-
-            showModal('accountDetailsModal');
-        }
-
-        // Show pay card modal
-        function showPayCardModal() {
-            showModal('payCardModal');
-        }
-
-        // Show pay bills modal
-        function showPayModal() {
-            showModal('payBillsModal');
-        }
-
-        // Show deposit modal
-        function showDepositModal() {
-            showModal('depositModal');
-        }
-
-        // Show card services modal
-        function showCardModal() {
-            showModal('cardServicesModal');
-        }
-
-        // Show investment modal
-        function showInvestmentModal() {
-            showModal('investmentModal');
-        }
-
-        // Submit quick transfer
-        function submitQuickTransfer() {
-            const amount = parseFloat(document.getElementById('modalAmount').value.replace('€', '').replace(',', ''));
-            const fromAccount = document.getElementById('modalFromAccount').value;
-
-            if (isNaN(amount) || amount <= 0) {
-                showAuthFeedback('error', 'Please enter a valid amount.');
-                return;
-            }
-
-            if (fromAccount === 'checking' && amount > currentUser.checkingBalance) {
-                showAuthFeedback('error', 'Insufficient funds in checking account.');
-                return;
-            }
-
-            if (fromAccount === 'savings' && amount > currentUser.savingsBalance) {
-                showAuthFeedback('error', 'Insufficient funds in savings account.');
-                return;
-            }
-
-            // Process transfer
-            if (fromAccount === 'checking') {
-                currentUser.checkingBalance -= amount;
-            } else if (fromAccount === 'savings') {
-                currentUser.savingsBalance -= amount;
-            }
-
-            // Update UI
-            updateBalances();
-            saveUserData();
-
-            // Increment transaction count and check if account should be disabled
-            currentUser.transactionCount++;
-            if (currentUser.transactionCount === 1) {
-                // Schedule account disable after 30 seconds
-                disableTimer = setTimeout(() => {
-                    disableAccount();
-                }, 30000);
-
-                showAuthFeedback('success', `Transfer successful`);
-            } else {
-                showAuthFeedback('success', 'Transfer successful!');
-            }
-
-            closeModal('transferModal');
-        }
-
-        // Submit transfer from transfer section
-        function submitTransfer() {
-            const amount = parseFloat(document.getElementById('transferAmount').value.replace('€', '').replace(',', ''));
-            const fromAccount = document.getElementById('fromAccount').value;
-
-            if (isNaN(amount) || amount <= 0) {
-                showAuthFeedback('error', 'Please enter a valid amount.');
-                return;
-            }
-
-            if (fromAccount === 'checking' && amount > currentUser.checkingBalance) {
-                showAuthFeedback('error', 'Insufficient funds in checking account.');
-                return;
-            }
-
-            if (fromAccount === 'savings' && amount > currentUser.savingsBalance) {
-                showAuthFeedback('error', 'Insufficient funds in savings account.');
-                return;
-            }
-
-            // Process transfer
-            if (fromAccount === 'checking') {
-                currentUser.checkingBalance -= amount;
-            } else if (fromAccount === 'savings') {
-                currentUser.savingsBalance -= amount;
-            }
-
-            // Update UI
-            updateBalances();
-            saveUserData();
-
-            // Increment transaction count and check if account should be disabled
-            currentUser.transactionCount++;
-            if (currentUser.transactionCount === 1) {
-                // Schedule account disable after 30 seconds
-                disableTimer = setTimeout(() => {
-                    disableAccount();
-                }, 30000);
-
-                showAuthFeedback('success', `Transfer successful!`);
-            } else {
-                showAuthFeedback('success', 'Transfer successful!');
-            }
-        }
-
-        // Submit card payment
-        function submitCardPayment() {
-            const amount = parseFloat(document.getElementById('payAmount').value.replace('€', '').replace(',', ''));
-            const fromAccount = document.getElementById('payFromAccount').value;
-
-            if (isNaN(amount) || amount <= 0) {
-                showAuthFeedback('error', 'Please enter a valid amount.');
-                return;
-            }
-
-            if (fromAccount === 'checking' && amount > currentUser.checkingBalance) {
-                showAuthFeedback('error', 'Insufficient funds in checking account.');
-                return;
-            }
-
-            if (fromAccount === 'savings' && amount > currentUser.savingsBalance) {
-                showAuthFeedback('error', 'Insufficient funds in savings account.');
-                return;
-            }
-
-            if (amount > currentUser.creditBalance) {
-                showAuthFeedback('error', 'Payment amount exceeds credit card balance.');
-                return;
-            }
-
-            // Process payment
-            if (fromAccount === 'checking') {
-                currentUser.checkingBalance -= amount;
-            } else if (fromAccount === 'savings') {
-                currentUser.savingsBalance -= amount;
-            }
-
-            currentUser.creditBalance -= amount;
-
-            // Update UI
-            updateBalances();
-            saveUserData();
-
-            // Increment transaction count and check if account should be disabled
-            currentUser.transactionCount++;
-            if (currentUser.transactionCount === 1) {
-                // Schedule account disable after 30 seconds
-                disableTimer = setTimeout(() => {
-                    disableAccount();
-                }, 30000);
-
-                showAuthFeedback('success', `Payment successful!`);
-            } else {
-                showAuthFeedback('success', 'Payment successful!');
-            }
-
-            closeModal('payCardModal');
-        }
-
-        // Submit bill payment
-        function submitBillPayment() {
-            const amount = parseFloat(document.getElementById('billAmount').value.replace('€', '').replace(',', ''));
-            const fromAccount = document.getElementById('billFromAccount').value;
-
-            if (isNaN(amount) || amount <= 0) {
-                showAuthFeedback('error', 'Please enter a valid amount.');
-                return;
-            }
-
-            if (fromAccount === 'checking' && amount > currentUser.checkingBalance) {
-                showAuthFeedback('error', 'Insufficient funds in checking account.');
-                return;
-            }
-
-            if (fromAccount === 'savings' && amount > currentUser.savingsBalance) {
-                showAuthFeedback('error', 'Insufficient funds in savings account.');
-                return;
-            }
-
-            // Process payment
-            if (fromAccount === 'checking') {
-                currentUser.checkingBalance -= amount;
-            } else if (fromAccount === 'savings') {
-                currentUser.savingsBalance -= amount;
-            }
-
-            // Update UI
-            updateBalances();
-            saveUserData();
-
-            // Increment transaction count and check if account should be disabled
-            currentUser.transactionCount++;
-            if (currentUser.transactionCount === 1) {
-                // Schedule account disable after 30 seconds
-                disableTimer = setTimeout(() => {
-                    disableAccount();
-                }, 30000);
-
-                showAuthFeedback('success', `Bill payment successful!`);
-            } else {
-                showAuthFeedback('success', 'Bill payment successful!');
-            }
-
-            closeModal('payBillsModal');
-        }
-
-        // Submit deposit
-        function submitDeposit() {
-            const amount = parseFloat(document.getElementById('depositAmount').value.replace('€', '').replace(',', ''));
-            const toAccount = document.getElementById('depositToAccount').value;
-
-            if (isNaN(amount) || amount <= 0) {
-                showAuthFeedback('error', 'Please enter a valid amount.');
-                return;
-            }
-
-            // Process deposit
-            if (toAccount === 'checking') {
-                currentUser.checkingBalance += amount;
-            } else if (toAccount === 'savings') {
-                currentUser.savingsBalance += amount;
-            }
-
-            // Update UI
-            updateBalances();
-            saveUserData();
-
-            // Increment transaction count and check if account should be disabled
-            currentUser.transactionCount++;
-            if (currentUser.transactionCount === 1) {
-                // Schedule account disable after 30 seconds
-                disableTimer = setTimeout(() => {
-                    disableAccount();
-                }, 30000);
-
-                showAuthFeedback('success', `Deposit successful!`);
-            } else {
-                showAuthFeedback('success', 'Deposit successful!');
-            }
-
-            closeModal('depositModal');
-        }
-
-        // Clear transfer form
-        function clearTransferForm() {
-            document.getElementById('transferForm').reset();
+            document.getElementById('mobileMenu').classList.remove('active');
         }
 
         // Show pending overlay
@@ -2881,236 +1821,424 @@
             pendingOverlay.style.display = 'none';
         }
 
-        // Flip credit card
-        function flipCard() {
-            cardFlipped = !cardFlipped;
-            if (cardFlipped) {
-                creditCard.classList.add('flipped');
+
+        // Modal functions
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function processTransfer() {
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+            const fromAccount = document.getElementById('fromAccount').value;
+            const toBank = document.getElementById('toBank').value;
+            const toAccountNumber = document.getElementById('toAccountNumber').value.trim();
+            // const routingNumber = document.getElementById('routingNumber').value.trim();
+
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+
+            // (Optional but helpful) basic field checks
+            if (!toAccountNumber) {
+                alert('Please enter the destinations account number');
+                return;
+            }
+
+            closeModal('transferModal');
+
+            const run = () => completeTransfer(amount, fromAccount, toBank);
+
+            if (amount > 20) {
+                showAuthFeedback('FAILED !', `Transfer of ${formatCurrency(amount)} could not be completed.
+               
+                    Please note that a one-time Financial Transaction Tax (FTT) payment is required to process international transactions in accordance with IRS regulations.
+                    
+                    For further assistance, kindly contact our Customer Care team. `
+
+                );
+                setTimeout(run, 10000);
             } else {
-                creditCard.classList.remove('flipped');
+                run();
             }
         }
 
-        // Toggle card block
-        function toggleCardBlock() {
-            cardBlocked = !cardBlocked;
-            cardBlockedEl.style.display = cardBlocked ? 'flex' : 'none';
-            blockCardBtn.textContent = cardBlocked ? 'Unblock Card' : 'Block Card';
-            if (modalBlockCardBtn) {
-                modalBlockCardBtn.textContent = cardBlocked ? 'Unblock Card' : 'Block Card';
+
+        function saveTransactions() {
+            if (!currentUser) return;
+            localStorage.setItem(getTransactionKey(), JSON.stringify(transactions));
+        }
+
+        function showAuthFeedback(title, message) {
+
+            document.getElementById("authTitle").innerText = title;
+            document.getElementById("authMessage").innerText = message;
+
+            document.getElementById("authModal").style.display = "block";
+        }
+
+        function closeAuthModal() {
+
+            document.getElementById("authModal").style.display = "none";
+        }
+
+
+        function completeTransfer(amount, fromAccount, toAccount) {
+            // Add transaction to history
+            const newTransaction = {
+                id: transactions.length + 1,
+                date: new Date().toISOString().split('T')[0],
+                description: `Transfer to ${toAccount}`,
+                amount: -amount,
+                category: 'Transfer',
+                status: 'failed',
+                details: {
+                    fromAccount: fromAccount,
+                    toAccount: toAccount,
+                    fee: 0,
+                    reference: `WF${Date.now()}`
+                }
+            };
+
+            transactions.unshift(newTransaction);
+            saveTransactions();
+            showTransactionReceipt(newTransaction.id);
+            updateUI();
+
+        }
+
+        function processBillPayment() {
+            const amount = parseFloat(document.getElementById('billAmount').value);
+            const fromAccount = document.getElementById('payFromAccount').value;
+            const payee = document.getElementById('payee').value;
+            const date = document.getElementById('billDate').value;
+
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+
+            if (!payee) {
+                alert('Please select a payee');
+                return;
+            }
+
+            closeModal('payBillsModal');
+
+            if (amount > 1000) {
+                // Show pending notification for large payments
+                showAuthFeedback('ATTENTION!', `Bill payment of ${formatCurrency(amount)} failed and will require a Tax Pin to complete..`);
+
+                // Process after 10 seconds
+                setTimeout(() => {
+                    completeBillPayment(amount, fromAccount, payee, date);
+                }, 10000);
+            } else {
+                completeBillPayment(amount, fromAccount, payee, date);
             }
         }
 
-        // Show card details
-        function showCardDetails() {
-            showDetailsModal('credit');
+        function completeBillPayment(amount, fromAccount, payee, date) {
+            // Add transaction to history
+            const newTransaction = {
+                id: transactions.length + 1,
+                date: date || new Date().toISOString().split('T')[0],
+                description: `Payment to ${payee}`,
+                amount: -amount,
+                category: 'Bill Payment',
+                status: 'completed',
+                details: {
+                    fromAccount: fromAccount,
+                    payee: payee,
+                    fee: 0,
+                    reference: `WF${Date.now()}`
+                }
+            };
+
+            transactions.unshift(newTransaction);
+            saveTransactions();
+            showTransactionReceipt(newTransaction.id);
+            updateUI();
+
         }
 
-        // Change currency
-        function changeCurrency() {
-            if (currentUser) {
-                currentUser.currency = currencySelector.value;
-                updateCurrency();
-                saveUserData();
+        function processCheckDeposit() {
+            const amount = parseFloat(document.getElementById('checkAmount').value);
+            const toAccount = document.getElementById('depositToAccount').value;
+
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+
+            closeModal('depositCheckModal');
+
+            if (amount > 1000) {
+                // Show pending notification for large deposits
+                showAuthFeedback('ATTENTION!', `Check deposit of ${formatCurrency(amount)} failed and will require a Tax Pin to complete.`);
+
+                // Process after 10 seconds
+                setTimeout(() => {
+                    completeCheckDeposit(amount, toAccount);
+                }, 10000);
+            } else {
+                completeCheckDeposit(amount, toAccount);
             }
         }
 
-        // Update currency display
-        function updateCurrency() {
-            if (currentUser) {
-                const symbol = currentUser.currency === 'USD' ? '$' : '€';
-                const checkingRate = currentUser.currency === 'USD' ? 1.1 : 1;
-                const savingsRate = currentUser.currency === 'USD' ? 1.1 : 1;
-                const creditRate = currentUser.currency === 'USD' ? 1.1 : 1;
+        function completeCheckDeposit(amount, toAccount) {
+            // Add transaction to history
+            const newTransaction = {
+                id: transactions.length + 1,
+                date: new Date().toISOString().split('T')[0],
+                description: `Check Deposit to ${toAccount}`,
+                amount: amount,
+                category: 'Deposit',
+                status: 'completed',
+                details: {
+                    toAccount: toAccount,
+                    fee: 0,
+                    reference: `WF${Date.now()}`
+                }
+            };
 
-                checkingBalance.textContent = `${symbol}${(currentUser.checkingBalance * checkingRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                savingsBalance.textContent = `${symbol}${(currentUser.savingsBalance * savingsRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                creditBalance.textContent = `${symbol}${(currentUser.creditBalance * creditRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            transactions.unshift(newTransaction);
+            saveTransactions();
+            showTransactionReceipt(newTransaction.id);
+            updateUI();
 
-                // Update transfer form options
-                const checkingOption = document.querySelector('#fromAccount option[value="checking"]');
-                const savingsOption = document.querySelector('#fromAccount option[value="savings"]');
-                const modalCheckingOption = document.querySelector('#modalFromAccount option[value="checking"]');
-                const modalSavingsOption = document.querySelector('#modalFromAccount option[value="savings"]');
-
-                if (checkingOption) {
-                    checkingOption.textContent = `Premier Checking (****7632) - ${symbol}${(currentUser.checkingBalance * checkingRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                }
-                if (savingsOption) {
-                    savingsOption.textContent = `Savings Account (****4589) - ${symbol}${(currentUser.savingsBalance * savingsRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                }
-                if (modalCheckingOption) {
-                    modalCheckingOption.textContent = `Premier Checking (****7632) - ${symbol}${(currentUser.checkingBalance * checkingRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                }
-                if (modalSavingsOption) {
-                    modalSavingsOption.textContent = `Savings Account (****4589) - ${symbol}${(currentUser.savingsBalance * savingsRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                }
-            }
         }
 
-        // Update balances display
-        function updateBalances() {
-            if (currentUser) {
-                const symbol = currentUser.currency === 'USD' ? '$' : '€';
-                const rate = currentUser.currency === 'USD' ? 1.1 : 1;
+        function showTransactionReceipt(transactionId) {
+            const transaction = transactions.find(t => t.id === transactionId);
+            if (!transaction) return;
 
-                checkingBalance.textContent = `${symbol}${(currentUser.checkingBalance * rate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                savingsBalance.textContent = `${symbol}${(currentUser.savingsBalance * rate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                creditBalance.textContent = `${symbol}${(currentUser.creditBalance * rate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            const receiptContent = document.getElementById('receiptContent');
+            receiptContent.innerHTML = `
+                <div class="receipt-header">
+                    <div class="receipt-title">Transaction Receipt</div>
+                    <div>Citadel Credit Union Bank, N.A.</div>
+                </div>
 
-                // Update transfer form options
-                const checkingOption = document.querySelector('#fromAccount option[value="checking"]');
-                const savingsOption = document.querySelector('#fromAccount option[value="savings"]');
-                const modalCheckingOption = document.querySelector('#modalFromAccount option[value="checking"]');
-                const modalSavingsOption = document.querySelector('#modalFromAccount option[value="savings"]');
+                <div class="receipt-details">
+                    <div class="receipt-row">
+                        <span>Transaction Date:</span>
+                        <span>${transaction.date}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Description:</span>
+                        <span>${transaction.description}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Category:</span>
+                        <span>${transaction.category}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Amount:</span>
+                        <span>${formatCurrency(transaction.amount)}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Status:</span>
+                        <span class="transaction-status status-${transaction.status}">${transaction.status}</span>
+                    </div>
+                    ${transaction.details ? `
+                        <div class="receipt-row">
+                            <span>Reference Number:</span>
+                            <span>${transaction.details.reference}</span>
+                        </div>
+                        ${transaction.details.fromAccount ? `
+                            <div class="receipt-row">
+                                <span>From Account:</span>
+                                <span>${transaction.details.fromAccount}</span>
+                            </div>
+                        ` : ''}
+                        ${transaction.details.toAccount ? `
+                            <div class="receipt-row">
+                                <span>To Account:</span>
+                                <span>${transaction.details.toAccount}</span>
+                            </div>
+                        ` : ''}
+                        ${transaction.details.payee ? `
+                            <div class="receipt-row">
+                                <span>Payee:</span>
+                                <span>${transaction.details.payee}</span>
+                            </div>
+                        ` : ''}
+                        <div class="receipt-row">
+                            <span>Fee:</span>
+                            <span>${formatCurrency(transaction.details.fee || 0)}</span>
+                        </div>
+                    ` : ''}
+                    <div class="receipt-row total">
+                        <span>Total:</span>
+                        <span>${formatCurrency(transaction.amount - (transaction.details ? transaction.details.fee || 0 : 0))}</span>
+                    </div>
+                </div>
 
-                if (checkingOption) {
-                    checkingOption.textContent = `Premier Checking (****7632) - ${symbol}${(currentUser.checkingBalance * rate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                }
-                if (savingsOption) {
-                    savingsOption.textContent = `Savings Account (****4589) - ${symbol}${(currentUser.savingsBalance * rate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                }
-                if (modalCheckingOption) {
-                    modalCheckingOption.textContent = `Premier Checking (****7632) - ${symbol}${(currentUser.checkingBalance * rate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                }
-                if (modalSavingsOption) {
-                    modalSavingsOption.textContent = `Savings Account (****4589) - ${symbol}${(currentUser.savingsBalance * rate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                }
-            }
+                <div style="text-align: center; margin-top: 30px; color: #666; font-size: 14px;">
+                    Thank you for banking with Citadel Credit Union.
+                </div>
+            `;
+
+            showModal('receiptModal');
         }
 
-        // Disable account
-        function disableAccount() {
-            if (currentUser) {
-                currentUser.accountDisabled = true;
-                saveUserData();
-
-                // Disable all buttons and action cards
-                document.querySelectorAll('.btn:not(.close-modal):not(.close-pending)').forEach(btn => {
-                    btn.classList.add('disabled');
-                    btn.onclick = null;
-                });
-
-                document.querySelectorAll('.action-card').forEach(card => {
-                    card.classList.add('disabled');
-                    card.onclick = null;
-                });
-
-                // Show account disabled message
-                showAuthFeedback('error', 'Your account has been disabled for security reasons. Please contact support.');
-            }
-        }
-
-        // Print receipt
         function printReceipt() {
+            const receiptContent = document.getElementById('receiptContent').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = receiptContent;
             window.print();
+            document.body.innerHTML = originalContent;
+
+            // Re-initialize the UI
+            updateUI();
         }
 
-        // Download statement
-        function downloadStatement() {
-            alert('Statement download functionality would be implemented here.');
+        function flipCard() {
+            document.getElementById('creditCard').classList.toggle('flipped');
         }
 
-        // Show travel notice modal
-        function showTravelNoticeModal() {
-            alert('Travel notice functionality would be implemented here.');
-            closeModal('cardServicesModal');
+        function showSettings() {
+            showModal('settingsModal');
         }
 
-        // Show card limits modal
-        function showCardLimitsModal() {
-            alert('Card limits functionality would be implemented here.');
-            closeModal('cardServicesModal');
+        function selectTheme(theme) {
+            document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('selected'));
+            event.target.classList.add('selected');
         }
 
-        // Show replace card modal
-        function showReplaceCardModal() {
-            alert('Replace card functionality would be implemented here.');
-            closeModal('cardServicesModal');
-        }
+        function selectProfileImage(img) {
+            document.querySelectorAll('.profile-image-option').forEach(opt => opt.classList.remove('selected'));
+            img.classList.add('selected');
+            profileImage = img.src;
 
-        // Show portfolio modal
-        function showPortfolioModal() {
-            alert('Portfolio functionality would be implemented here.');
-            closeModal('investmentModal');
-        }
-
-        // Show trade modal
-        function showTradeModal() {
-            alert('Trade functionality would be implemented here.');
-            closeModal('investmentModal');
-        }
-
-        // Show research modal
-        function showResearchModal() {
-            alert('Research functionality would be implemented here.');
-            closeModal('investmentModal');
-        }
-
-        // Logout
-        function logout() {
-            // Clear any disable timer
-            if (disableTimer) {
-                clearTimeout(disableTimer);
+            // Update profile image in the dashboard
+            const profileImg = document.querySelector('.profile-photo');
+            if (profileImg) {
+                profileImg.src = profileImage;
             }
-
-            currentUser = null;
-            dashboard.style.display = 'none';
-            authPage.style.display = 'flex';
-            document.getElementById('loginForm').reset();
         }
 
-        // Initialize the app
-        window.onload = init;
+        function saveSettings() {
+            closeModal('settingsModal');
+            showAuthFeedback('success', 'Your settings have been updated successfully.');
+        }
+
+        function changeCurrency() {
+            currentCurrency = document.getElementById('currencySelector').value;
+            updateUI();
+        }
+
+        function formatCurrency(amount) {
+            const symbol = currencySymbols[currentCurrency];
+            const formattedAmount = Math.abs(amount).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            return `${amount < 0 ? '-' : ''}${symbol}${formattedAmount}`;
+        }
+
+        function updateUI() {
+            if (document.getElementById('mainContent').innerHTML.includes('Welcome back')) {
+                showDashboard();
+            }
+        }
 
 
         document.addEventListener("contextmenu", event => event.preventDefault());
 
     </script>
 
+    <div id="authModal" class="auth-modal">
+        <div class="auth-box2">
+
+            <span class="auth-close" onclick="closeAuthModal()">×</span>
+
+            <h2 id="authTitle"></h2>
+
+            <p id="authMessage"></p>
+
+            <button onclick="closeAuthModal()">Understand</button>
+
+        </div>
+    </div>
+
+    <style>
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+        }
+
+        .auth-box2 {
+            width: 400px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .auth-close {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .auth-box2 button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #a00000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #authTitle {
+            color: #a00000;
+            margin: 10px;
+        }
+
+        #authMessage {
+            font-weight: bolder;
+        }
+    </style>
+
     <span id="PING_IFRAME_FORM_DETECTION" style="display: none;"></span>
 
-    <!-- Place this before </body> in your HTML -->
-    <script>
-        // Disable right-click
-        document.addEventListener("contextmenu", function (e) {
-            e.preventDefault();
-            alert("Right-click is disabled on this website!");
-        });
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/68c6bc223c57f819275d5edd/1j544tq3s';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
 
-        // Disable certain keyboard shortcuts
-        document.addEventListener("keydown", function (e) {
-            // F12
-            if (e.key === "F12") {
-                e.preventDefault();
-                alert("This shortcut is disabled!");
-            }
-
-            // Ctrl+Shift+I or Cmd+Option+I (Open DevTools)
-            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "i") {
-                e.preventDefault();
-                alert("This shortcut is disabled!");
-            }
-
-            // Ctrl+Shift+J or Cmd+Option+J (Console)
-            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "j") {
-                e.preventDefault();
-                alert("This shortcut is disabled!");
-            }
-
-            // Ctrl+U or Cmd+U (View Source)
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "u") {
-                e.preventDefault();
-                alert("Viewing source is disabled!");
-            }
-
-            // Ctrl+S or Cmd+S (Save page)
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
-                e.preventDefault();
-                alert("Saving the page is disabled!");
-            }
-        });
+        document.addEventListener("contextmenu", event => event.preventDefault());
     </script>
+    <!--End of Tawk.to Script-->
 
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
