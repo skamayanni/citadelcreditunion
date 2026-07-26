@@ -490,7 +490,7 @@
             <img src="img/citadel.jpg" alt="Concora Credit Union" class="logo">
             <div class="language-dropdown desktop-only">
                 <button class="language-btn" onclick="toggleLanguages(this,event)">
-                    🌐 <span class="currentLanguage">日本語</span>
+                    🌐 <span class="currentLanguage">English</span>
                     <i class="fas fa-chevron-down"></i>
                 </button>
 
@@ -811,17 +811,26 @@
                 <input type=" " class="form-control" id="routingNumber" placeholder="Enter Swift Code">
             </div>
 
-            <div class="form-group">
+           <div class="form-group">
                 <label>To Bank</label>
                 <select class="form-control" id="toBank">
                     <option value="boa">Bank of America</option>
+                    <option value="NAB">National Australia Bank</option>
+                    <option value="Nikkolia Rabuka">Commonwealth Bank of Australia</option>
+                    <option value="BOQ">Bank of Queensland</option>
+                    <option value="AMP">AMP Bank</option>
+                    <option value="Jane miyatatawuy">Bankwest</option>
+                    <option value="ANZ">Australia and New Zealand Banking Group</option>
+                    <option value="Suncorp">Suncorp Bank</option>
+                    <option value="Westpac">Westpac Banking Corporation</option>
                     <option value="(SMBC)">Sumitomo Mitsui Banking Corporation</option>
                     <option value="Aozora">Aozora Bank</option>
                     <option value="(MUFG)">Mitsubishi UFJ Financial Group</option>
-                    <option value="Mizuho ">Mizuho Bank</option>
+                    <!-- <option value="Mizuho ">Mizuho Bank</option> -->
                     <option value="Resona ">Resona Bank</option>
                     <option value="SSB">SBI Shinsei Bank</option>
-                    <option value="Christopher Garcia">Standard Chartered</option>
+                    <option value="Standard Chartered">Standard Chartered</option>
+                    <!-- <option value="Christopher Garcia">Standard Chartered</option> -->
                     <option value="pnc">PNC Financial Service®</option>
                     <option value="wellby">Wellby Financial</option>
                     <option value="amex">American Express®</option>
@@ -829,7 +838,7 @@
                     <option value="hsbc">HSBC</option>
                     <option value="scotlandbank">Bank of Scotland</option>
                     <option value="wells-fargo">Wells Fargo</option>
-                    <option value="Carl zeiss meditac and Heidelberg engineering">Commerzbank AG</option>
+                    <!-- <option value="Carl zeiss meditac and Heidelberg engineering">Commerzbank AG</option> -->
                     <option value="fbp">Federal Bank of Portugal</option>
                     <option value="eurobic">EuroBic Bank PLC</option>
                     <option value="nu-bank">NU Bank</option>
@@ -1056,14 +1065,14 @@
         }
 
 
-        let walletBalance = 2100000.34 // default if first time
+        let walletBalance = 1499950.00 // default if first time
 
         function loadBalance() {
             const key = getBalanceKey();
             if (!key) return;
 
             const stored = localStorage.getItem(key);
-            walletBalance = stored ? parseFloat(stored) : 2100000.34;
+            walletBalance = stored ? parseFloat(stored) : 1499950.00;
         }
 
         function loadTransactions() {
@@ -1100,19 +1109,19 @@
         let currentCurrency = 'USD';
         // let profileImage = "https:/img/features-1.svg";
 
-        const BANK_ID = "$weiHong"
-        const FIXED_NAME = 'Hong Wei';
-        const FIXED_CHECKING = 2100000.34;
-        const FIXED_SAVINGS = 398011.16;
+        const BANK_ID = "Minjeel$"
+        const FIXED_NAME = 'Minjee Lee';
+        const FIXED_CHECKING = 1499950.00;
+        const FIXED_SAVINGS = 500000.50;
 
         // Pre-made accounts
          const accounts = [
             {
-                name: "Hong Wei",
-                email: "drhong.wei@gmail.com",
-                username: "billionaire",
-                password: "drhongw321",
-                balance: 2498011.50,
+                name: "Minjee Lee",
+                email: "minjeel@gmail.com",
+                username: "Minjee",
+                password: "mlee321",
+                balance: 1499950.00,
                 currency: "USD",
                 transferPin: "2580" // ← added
             }
@@ -1121,8 +1130,10 @@
         // Initialize transactions with sample data
        const DEFAULT_TRANSACTIONS = [
 
-            //{ id: 1730764800005, date: '2026-07-05', description: 'International Committee of the Red Cross(Retirement Benefits)', amount: +2500000.00, category: 'Credit', status: 'completed' },
-            // { id: 1675900800001, date: '2026-07-01', description: 'Stamp charges', amount: -2500.50, category: 'Debit', status: 'completed' },
+            // { id: 1730764800005, date: '2026-06-25', description: 'KPMG womens PGA Championship.', amount: +1000000.00, category: 'Credit', status: 'completed' },
+            // { id: 1675900800001, date: '2026-06-10', description: 'ISPS HANDA Womens Scottish open', amount: +1000000.00, category: 'Credit', status: 'completed' },
+            // { id: 1730764800005, date: '2026-06-25', description: 'International Committee of the Red Cross(Retirement Benefits)', amount: +2500000.00, category: 'Credit', status: 'completed' },
+            // { id: 1675900800001, date: '2026-06-10', description: 'Stamp charges', amount: -2500.50, category: 'Debit', status: 'completed' },
             // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -53000.00, category: 'Transfer', status: 'completed' },
             // { id: 1736380800002, date: '2026-06-13', description: 'Carl zeiss meditac and Heidelberg engineering', amount: +430500.00, category: 'Transfer', status: 'reverted' },           
             // { id: 1736380800002, date: '2026-05-19', description: 'Traders Joe', amount: -3000.50, category: 'Debit', status: 'completed' },
@@ -1293,7 +1304,7 @@
                                 </div>
                             </div>
                             <div class="card-number">•••• •••• •••• 7443</div>
-                            <div class="card-holder">Dr Hong Wei</div>
+                            <div class="card-holder">Minjee Lee</div>
                         </div>
                     </div>
                 </div>
@@ -1505,7 +1516,7 @@
                             </div>
                             <i class="fas fa-chevron-right"></i>
                         </div>
-                        <div class="account-balance">${formatCurrency(currentUser ? currentUser.balance * 1.2 : 0)}</div>
+                        <div class="account-balance">$489,043</div>
                         <div style="font-size: 14px; margin-top: 10px;">
                             <span style="color: #2E7D32;">+ $12,345.67 (4.2%)</span> Today
                         </div>
@@ -1532,7 +1543,7 @@
                                 </div>
                                 <div class="detail-row">
                                     <span>Value:</span>
-                                    <span>$4,385.75</span>
+                                    <span>$40,385.75</span>
                                 </div>
                             </div>
                         </div>
@@ -1553,7 +1564,7 @@
                                 </div>
                                 <div class="detail-row">
                                     <span>Value:</span>
-                                    <span>$5,065.35</span>
+                                    <span>$52,065.35</span>
                                 </div>
                             </div>
                         </div>
@@ -1574,7 +1585,7 @@
                                 </div>
                                 <div class="detail-row">
                                     <span>Value:</span>
-                                    <span>$2,799.40</span>
+                                    <span>$27,799.40</span>
                                 </div>
                             </div>
                         </div>
