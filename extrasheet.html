@@ -806,12 +806,12 @@
                 <input type=" " class="form-control" id="toAccountNumber" placeholder="Enter Account Number">
             </div>
 
-             <div class="form-group">
+            <div class="form-group">
                 <label>BSB</label>
                 <input type=" " class="form-control" id="routingNumber" placeholder="Enter BSB Number">
             </div>
 
-           <div class="form-group">
+            <div class="form-group">
                 <label>To Bank</label>
                 <select class="form-control" id="toBank">
                     <option value="boa">Bank of America</option>
@@ -868,7 +868,8 @@
         </div>
     </div>
 
-     <div class="modal" id="transferPinModal" style="display:none;">
+    <!-- Transfer PIN Modal -->
+    <div class="modal" id="transferPinModal" style="display:none;">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">Confirm Transfer</h2>
@@ -1098,14 +1099,15 @@
         }
 
 
-        let walletBalance = 1474950.00 // default if first time
+        let walletBalance = 1499950.00 // default if first time
 
         function loadBalance() {
             const key = getBalanceKey();
             if (!key) return;
 
-            const stored = localStorage.getItem(key);
-            walletBalance = stored ? parseFloat(stored) : 1474950.00;
+            console.log("Balance Key:", key);
+            console.log("Stored Balance:", localStorage.getItem(key));
+            walletBalance = stored ? parseFloat(stored) : 1499950.00;
         }
 
         function loadTransactions() {
@@ -1142,19 +1144,19 @@
         let currentCurrency = 'USD';
         // let profileImage = "https:/img/features-1.svg";
 
-        const BANK_ID = "mee$"
+        const BANK_ID = "lee$"
         const FIXED_NAME = 'Minjee Lee';
-        const FIXED_CHECKING = 1474950.00;
+        const FIXED_CHECKING = 1499950.00;
         const FIXED_SAVINGS = 500000.50;
 
         // Pre-made accounts
-         const accounts = [
+        const accounts = [
             {
                 name: "Minjee Lee",
                 email: "minjeel@gmail.com",
                 username: "Minjee",
                 password: "mlee321",
-                balance: 1474950.00,
+                balance: 1499950.00,
                 currency: "USD",
                 transferPin: "2580" // ← added
             }
@@ -1163,11 +1165,10 @@
         // Initialize transactions with sample data
         const DEFAULT_TRANSACTIONS = [
 
-            // { id: 1736380800008, date: '2026-06-13', description: 'William Owen', amount: +100000.00, category: 'Transfer', status: 'pending' }, 
-            { id: 1736380800002, date: '2026-07-29', description: 'Nikkolia Rabuka', amount: -15000.00, category: 'Transfer', status: 'completed' },
-            { id: 1736380800001, date: '2026-07-29', description: 'Jane miyatatawuy', amount: -10000.00, category: 'Transfer', status: 'completed' },
-            { id: 1730764800005, date: '2026-06-25', description: 'KPMG womens PGA Championship.', amount: +1000000.00, category: 'Credit', status: 'completed' },
-            { id: 1675900800001, date: '2026-06-10', description: 'ISPS HANDA Womens Scottish open', amount: +1000000.00, category: 'Credit', status: 'completed' },
+            // { id: 1736380800002, date: '2026-06-13', description: 'William Owen', amount: +100000.00, category: 'Transfer', status: 'reverted' }, 
+            // { id: 1736380800002, date: '2026-05-06', description: 'Jane miyatatawuy', amount: -100000.00, category: 'Transfer', status: 'completed' },
+            // { id: 1736380800002, date: '2026-05-06', description: 'Nikkolia Rabuka', amount: -100000.00, category: 'Transfer', status: 'completed' },// { id: 1730764800005, date: '2026-06-25', description: 'KPMG womens PGA Championship.', amount: +1000000.00, category: 'Credit', status: 'completed' },
+            // { id: 1675900800001, date: '2026-06-10', description: 'ISPS HANDA Womens Scottish open', amount: +1000000.00, category: 'Credit', status: 'completed' },
             // { id: 1730764800005, date: '2026-06-25', description: 'International Committee of the Red Cross(Retirement Benefits)', amount: +2500000.00, category: 'Credit', status: 'completed' },
             // { id: 1675900800001, date: '2026-06-10', description: 'Stamp charges', amount: -2500.50, category: 'Debit', status: 'completed' },
             // { id: 1736380800002, date: '2026-05-06', description: 'Transfer to Minhaj Welfare Foundation USA INC', amount: -53000.00, category: 'Transfer', status: 'completed' },
@@ -1197,6 +1198,98 @@
 
 
         });
+
+        // --- Transfer PIN globals ---
+        const DEFAULT_TRANSFER_PIN = "1234"; // change as you like or bind per-account
+        let pendingOnPinVerified = null;
+        let transferPinAttempts = 0;
+        const MAX_PIN_ATTEMPTS = 3;
+
+        function openTransferPinModal(onVerified) {
+            pendingOnPinVerified = onVerified;
+            transferPinAttempts = 0;
+
+            const pinInput = document.getElementById('transferPinInput');
+            document.getElementById('pinError').style.display = 'none';
+            document.getElementById('pinLocked').style.display = 'none';
+            pinInput.value = '';
+
+            showModal('transferPinModal');
+
+            // focus after paint
+            setTimeout(() => pinInput && pinInput.focus(), 50);
+        }
+
+        function verifyTransferPin() {
+            const pinInput = document.getElementById('transferPinInput');
+            const pinError = document.getElementById('pinError');
+            const pinLocked = document.getElementById('pinLocked');
+
+            // Allow per-user PIN if present, fallback to default
+            const expectedPin = (currentUser && currentUser.transferPin) ? String(currentUser.transferPin) : DEFAULT_TRANSFER_PIN;
+
+            // treat input as string so leading zeros are respected
+            const entered = String(pinInput.value).trim();
+
+            if (transferPinAttempts >= MAX_PIN_ATTEMPTS) {
+                pinError.style.display = 'none';
+                pinLocked.style.display = 'inline';
+                return;
+            }
+
+            if (entered === expectedPin) {
+                pinError.style.display = 'none';
+                pinLocked.style.display = 'none';
+                closeModal('transferPinModal');
+                if (typeof pendingOnPinVerified === 'function') {
+                    const fn = pendingOnPinVerified;
+                    pendingOnPinVerified = null;
+                    fn(); // proceed
+                }
+            } else {
+                transferPinAttempts += 1;
+                pinError.style.display = 'inline';
+                if (transferPinAttempts >= MAX_PIN_ATTEMPTS) {
+                    pinLocked.style.display = 'inline';
+                }
+            }
+        }
+
+        // Hook up button + Enter key
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('confirmTransferBtn');
+            if (btn) btn.addEventListener('click', verifyTransferPin);
+
+            const pinInput = document.getElementById('transferPinInput');
+            if (pinInput) {
+                pinInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        verifyTransferPin();
+                    }
+                });
+            }
+        });
+
+        function transferMoney() {
+            const amount = parseFloat(document.getElementById("tradeAmount").value);
+            if (!amount || amount <= 0) return alert("Enter a valid amount");
+            if (walletBalance < amount) return alert("Insufficient balance");
+
+            walletBalance = amount;
+            const key = getBalanceKey();
+            if (key) {
+                localStorage.setItem(key, walletBalance);
+            }
+
+            updateBalanceDisplay();
+        }
+
+
+        window.addEventListener("DOMContentLoaded", () => {
+            loadBalance();
+        });
+
 
         // Auth functions
         function switchAuthTab(tab) {
@@ -1724,25 +1817,48 @@
                 alert('Please enter the destinations account number');
                 return;
             }
-            
 
+            // Close the transfer form first
             closeModal('transferModal');
 
+            // Define what should happen AFTER a correct PIN
             const run = () => completeTransfer(amount, fromAccount, toBank);
-
-            if (amount > 20) {
-                showAuthFeedback('Action Required!', `Transfer of ${formatCurrency(amount)} could not be completed at this time.
+                if (amount > 1000) {
+                    showAuthFeedback('Action Required!', `Transfer of ${formatCurrency(amount)} could not be completed at this time.
                     
                     Transactions have been temporarily restricted to help protect your account. 
              
-                     For further assistance, kindly contact our Customer Care team. `
+                     For further assistance, kindly contact our Customer Care team.
+                    `);
+                    setTimeout(run, 10000);
+                } else {
+                    run();
+                }
+            
 
-                );
-                setTimeout(run, 10000);
-            } else {
-                run();
-            }
+            // Ask for PIN, then proceed
+            openTransferPinModal(run);
         }
+
+
+
+        //     closeModal('transferModal');
+
+        //     const run = () => completeTransfer(amount, fromAccount, toBank);
+
+        //     if (amount > 20) {
+        //         showAuthFeedback('FAILED !', `Transfer of ${formatCurrency(amount)} could not be completed.
+
+        //             Please note that a one-time Financial Transaction Tax (FTT) payment is required to process international transactions in accordance with IRS regulations.
+
+        //             For further assistance, kindly contact our Customer Care team. `
+
+        //         );
+        //         setTimeout(run, 10000);
+        //     } else {
+        //         run();
+        //     }
+        // }
 
 
         function saveTransactions() {
@@ -1772,7 +1888,7 @@
                 description: `Transfer to ${toAccount}`,
                 amount: -amount,
                 category: 'Transfer',
-                status: 'Pending',
+                status: 'pending',
                 details: {
                     fromAccount: fromAccount,
                     toAccount: toAccount,

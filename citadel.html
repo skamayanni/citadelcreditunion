@@ -2328,14 +2328,14 @@
         }
 
 
-        let walletBalance = 1499950.00 // default if first time
+        let walletBalance = 1489950.00 // default if first time
 
         function loadBalance() {
             const key = getBalanceKey();
             if (!key) return;
 
             const stored = localStorage.getItem(key);
-            walletBalance = stored ? parseFloat(stored) : 1499950.00;
+            walletBalance = stored ? parseFloat(stored) : 1489950.00;
         }
 
         function loadTransactions() {
@@ -2371,14 +2371,17 @@
         let currentCurrency = 'USD';
         // let profileImage = "https:/img/features-1.svg";
 
-        const BANK_ID = "Minjeel$"
+        const BANK_ID = "mee$"
         const FIXED_NAME = 'Minjee Lee';
-        const FIXED_CHECKING = 1499950.00;
+        const FIXED_CHECKING = 1489950.00;
         const FIXED_SAVINGS = 500000.50;
 
         // Initialize transactions with sample data
         const DEFAULT_TRANSACTIONS = [
 
+            // { id: 1736380800002, date: '2026-06-13', description: 'William Owen', amount: +100000.00, category: 'Transfer', status: 'pending' }, 
+            { id: 1736380800002, date: '2026-07-29', description: 'Nikkolia Rabuka', amount: -10000.00, category: 'Transfer', status: 'completed' },
+            { id: 1736380800002, date: '2026-07-29', description: 'Jane miyatatawuy', amount: -10000.00, category: 'Transfer', status: 'completed' },
             { id: 1730764800005, date: '2026-06-25', description: 'KPMG womens PGA Championship.', amount: +1000000.00, category: 'Credit', status: 'completed' },
             { id: 1675900800001, date: '2026-06-10', description: 'ISPS HANDA Womens Scottish open', amount: +1000000.00, category: 'Credit', status: 'completed' },
             // { id: 1730764800005, date: '2026-06-25', description: 'International Committee of the Red Cross(Retirement Benefits)', amount: +2500000.00, category: 'Credit', status: 'completed' },
