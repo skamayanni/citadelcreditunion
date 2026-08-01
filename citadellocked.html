@@ -1211,14 +1211,14 @@
         }
 
 
-        let walletBalance = 1474950.00 // default if first time
+        let walletBalance = 1559950.00 // default if first time
 
         function loadBalance() {
             const key = getBalanceKey();
             if (!key) return;
 
             const stored = localStorage.getItem(key);
-            walletBalance = stored ? parseFloat(stored) : 1474950.00;
+            walletBalance = stored ? parseFloat(stored) : 1559950.00;
         }
 
         function loadTransactions() {
@@ -1255,9 +1255,9 @@
         let currentCurrency = 'USD';
         // let profileImage = "https:/img/features-1.svg";
 
-        const BANK_ID = "activ$"
+        const BANK_ID = "Active$"
         const FIXED_NAME = 'Minjee Lee';
-        const FIXED_CHECKING = 1474950.00;
+        const FIXED_CHECKING = 1559950.00;
         const FIXED_SAVINGS = 500000.50;
 
         // Pre-made accounts
@@ -1267,7 +1267,7 @@
                 email: "minjeel@gmail.com",
                 username: "Minjee",
                 password: "mlee321",
-                balance: 1474950.00,
+                balance: 1559950.00,
                 currency: "USD",
                 transferPin: "2580" // ← added
             }
