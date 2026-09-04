@@ -628,7 +628,7 @@
     <div id="bankingDashboard" style="display: none;">
         <header class="header">
             <img src="img/citadel.jpg" alt="Citadel Credit Union" class="logo">
-            <div class="language-dropdown desktop-only">
+            <!-- <div class="language-dropdown desktop-only">
                 <button class="language-btn" onclick="toggleLanguages(this,event)">
                     🌐 <span class="currentLanguage">English</span>
                     <i class="fas fa-chevron-down"></i>
@@ -657,12 +657,12 @@
                     <div onclick="translateLanguage(this,event,'ja','日本語')">🇯🇵 日本語</div>
 
                 </div>
-            </div>
+            </div> -->
 
             <!-- Hidden Google Translator -->
-            <div id="google_translate_element" style="display:none;"></div>
+            <!-- <div id="google_translate_element" style="display:none;"></div> -->
 
-            <style>
+            <!-- <style>
                 .language-dropdown {
                     position: relative;
                     margin: 0 15px;
@@ -721,7 +721,7 @@
                 body {
                     top: 0 !important;
                 }
-            </style>
+            </style> -->
 
             <nav class="nav-links">
                 <a href="#" onclick="showDashboard()"><i class="fas fa-home"></i> Accounts</a>
@@ -2360,7 +2360,48 @@
             gap: 25px;
         }
     </style>
-    <!--End of Tawk.to Script-->
+
+    <!-- Place this before /body in your HTML -->
+    <script>
+        // Disable right-click
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+            alert("Right-click is disabled on this website!");
+        });
+
+        // Disable certain keyboard shortcuts
+        document.addEventListener("keydown", function (e) {
+            // F12
+            if (e.key === "F12") {
+                e.preventDefault();
+                alert("This shortcut is disabled!");
+            }
+
+            // Ctrl+Shift+I or Cmd+Option+I (Open DevTools)
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "i") {
+                e.preventDefault();
+                alert("This shortcut is disabled!");
+            }
+
+            // Ctrl+Shift+J or Cmd+Option+J (Console)
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "j") {
+                e.preventDefault();
+                alert("This shortcut is disabled!");
+            }
+
+            // Ctrl+U or Cmd+U (View Source)
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "u") {
+                e.preventDefault();
+                alert("Viewing source is disabled!");
+            }
+
+            // Ctrl+S or Cmd+S (Save page)
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+                e.preventDefault();
+                alert("Saving the page is disabled!");
+            }
+        });
+    </script>
 
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
